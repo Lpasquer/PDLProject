@@ -2,64 +2,36 @@
 
 A simple command line, java based, Wikipedia table extractor.
 
-## Introduction
+## Purpose 
 
-These introduction will tell you more about the objectives and the results that will get by using this software.
+Wikipedia Matrix is a software whose goal is to extract existing table from a wikipedia’s page through the HTML or by the Wikitext.
 
-### Objective
+In order to do so, the software needs to verify that the page/URL is from Wikipedia. It also verify if the URL exists.
 
-The software aim to return you as much table as possible from a wikipedia page that you provide to it in CSV format. It will try to exclude the table that cannot be parsed into CSV and inform you about how much table it can parse.
+If the page contains no table, the software will inform you that the page had no valid table.
+For each existing table in the Wikipedia’s page, there will be two .csv files created : one from the wikitext analysis and one for the HTML one
 
-### Results
 
-If you give a wikipedia page link that contains tables, the software will generate you the CSV for every valid tables in the page and exclude the ones that cannot be converted into CSV.
+## Context
 
-If you give a wikipedia page link that doesn't contains any valid tables or no tables at all, the software will inform you of this and won't generate any file.
+This project main goal is to improve the work of the previous team that worked on it. A new vision on the subject and the code will generate added value and will improve the software.
 
-If you give any other link than wikipedia, the software will tell you that the page you provide is not compatible and won't generate any file.
 
-At every steps you can check the list of link that you provided to the software and check if and how many table it can extract.
 
-## Getting Started
+## Softwares
 
-These instructions will show you how to get a working copy of the project to allow you to run and test de software.
 
-### Prerequisites
+Eclipse - The IDE mainly used by our crew.
 
-You will need a java compiler to compile and run the program properly. Alternatively you can choose one the bellow IDE to make it easier.
+Maven - Dependency Management.
 
-```
-IntelliJ IDEA
-Eclipse
-NetBeans
-```
+Sweble-Wikitext - The java based WikiText Parser.
 
-### Installing
+GenMyModel - The UML editor.
 
-Depending on the IDE that you chose, you will have to import the pom.xml file to your project. This will allow Maven to automatically import the missing libraries to properly run the project.
+Word - The document editor used to create the specifications.
 
-Everything is now set and you are ready to run the program.
-
-## Running the tests
-
-The Tests are located under:
-
-```
-src/test/java/pdl/wiki
-```
-
-You can simply run them with your favorite IDE.
-
-### Client Benchmark
-
-```
-src/test/java/pdl/wiki/BenchTest.java
-```
- This is the class that the client asked us to add and implement into our project. You can use it to BenchMark the software with 300 Wikipedia Links.
-
-## Deployment
-
-No deployment of the project is planned on client servers/computers as the client didn't specifically asked to do it. The project can only be used via console commands.
+GitHub - For sharing all the modifications to the project
 
 ## Built With
 
@@ -74,20 +46,12 @@ No deployment of the project is planned on client servers/computers as the clien
 
 Every members of our crew had the opportunity to contribute as much as they want to there tasks, as long as they are assigned to it in the [Roadmap](https://github.com/vad101010/PDLProject/projects/1).
 
-## Versioning
-
-We aimed to release the version 1.0 were everything is supposed to work perfectly (project main tasks done and tested). We started on version 0.0.1 with the following update schema:
-```
-(X.Y.Z) where X, Y and Z are numbers e.g. 0.2.5
-```
-Every small update increment the Z number by one and a major update (with tested and working main functionality done) increment the Y number by 1. Finally only if every features are done the X number is incremented and it can only be incremented again if the client ask new features and if we implement them. You can find every versions changelog in the [CHANGELOG.md file](https://github.com/vad101010/PDLProject/blob/master/CHANGELOG.md)
-
 ## Authors
 
-* **Arnaud--Mozdzer Bastien** - *Team leader - Java/UML developer* - [](https://github.com/)
+* **Arnaud--Mozdzer Bastien** - *Team leader - Java/UML developer* - [](https://github.com/BastienAM)
 * **Salerno Damien** - *Java/UML developer - Specification writer* - [Nrkz](https://github.com/Nrkz)
-* **Poilane Arthur** - *Java/UML developer - Specification writer* - [](https://github.com/)
-* **Bruhammer Mélina** - *Java/UML developer - Specification writer* - [](https://github.com/)
+* **Poilane Arthur** - *Java/UML developer - Specification writer* - [](https://github.com/TuVeuxVoirMaBIG)
+* **Bruhammer Mélina** - *Java/UML developer - Specification writer* - [](https://github.com/MelinaBHMR)
 * **Sarrazin Quentin** - *Java/UML developer - Specification writer* - [QuentinSarra](https://github.com/QuentinSarra)
 
 ## License
