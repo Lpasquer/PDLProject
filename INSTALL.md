@@ -51,7 +51,7 @@ Then select,
 Maven > Existing Maven Projects
 ```
 
-Browse directory where here is the project and select the pom.xml.
+Browse to the project's directory and select the pom.xml.
 
 ### Launch project
 
