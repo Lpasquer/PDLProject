@@ -16,20 +16,19 @@ The first package contains Extractor.java, an interface implemented by two class
 
 ![](/media/Class_Diagram.png)
 
+### Sequence Diagram
+
+#### Add wikipedia link
+
+![](/media/Sequence_Diagram_addLink.jpg)
+
+#### Save tables as csv
+
+![](/media/Sequence_Diagram_saveCSV.jpg)
+
 ### Use Case
 
 ![](/media/Use_Case.jpg)
 - The user can enter a Wikipedia link in the application to retrieve the tables from this page. He can add and remove several.
 - The user chooses to save the tables or not.
 - The user changes the tables backup directory.
-
-### Sequence Diagram
-
-#### Add Link
-
-![](/media/Sequence_Diagram_addLink.jpg)
-
-#### Save CSV
-
-![](/media/Sequence_Diagram_saveCSV.jpg)
-

@@ -73,7 +73,7 @@ Try with Intellij IDEA Commmunity 2019.2.3.
 
 Import the project, select the pom.xml file and click "Next" untill you can click Finish
 
-### Run project
+### Launch project
 
 Navigate in the project explorer,
 
@@ -87,7 +87,7 @@ Right-click to the class WikipediaMatrix,
 Run 'WikipediaMatrix:main()'
 ```
 
-### Run test
+### Launch test
 
 Right-click in the project, 
 
@@ -105,7 +105,7 @@ File > Open Project...
 
 And select the pom.xml file.
 
-### Run project
+### Launch project
 
 Right-click to the Project,
 
@@ -115,7 +115,7 @@ Run
 
 And select main class for execution : pdl.wikiWikipediaMatrix.
 
-### Run test
+### Launch test
 
 Right-click in the project,
 
