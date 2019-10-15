@@ -30,7 +30,7 @@ This project main goal is to improve the work of the previous team that worked o
 
 ## Contributing
 
-Every members of our crew had the opportunity to contribute as much as they want to there tasks, as long as they are assigned to it in the [Roadmap](https://github.com/vad101010/PDLProject/projects/1).
+Every members of our crew had the opportunity to contribute as much as they want to there tasks, as long as they are assigned to it in the [Roadmap](https://github.com/Nrkz/PDLProject/projects/1).
 
 
 ## Authors
