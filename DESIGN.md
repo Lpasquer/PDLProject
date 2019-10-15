@@ -25,6 +25,11 @@ The first package contains Extractor.java, an interface implemented by two class
 
 ### Sequence Diagram
 
-![](/media/Sequence_Diagram.jpg)
+#### Add Link
 
-We have completed the sequence diagram for the Use Case « Add Link » . To begin with, we use an addLink() function and used the WikipediaMatrix class. This class requests the url of the Wikipedia page. Once the link is given, we create an Url object that itself uses the Pagechecker class. We use the urlChecker function which returns the tables present on the Wikipedia page. After using the Count Wikitable instruction, the array number is retrieved. Add the url to the Wikipediamatrix url list and return the number of array found to the user.
+![](/media/Sequence_Diagram_addLink.jpg)
+
+#### Save CSV
+
+![](/media/Sequence_Diagram_saveCSV.jpg)
+
