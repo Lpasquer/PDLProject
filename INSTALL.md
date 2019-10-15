@@ -71,7 +71,7 @@ Run As > Maven test
 ## Installation with Intellij IDEA
 Try with Intellij IDEA Commmunity 2019.2.3.
 
-Import the project, select the pom.xml file and next the steps.
+Import the project, select the pom.xml file and follow the next steps.
 
 ### Run project
 
