@@ -37,7 +37,7 @@ Every members of our crew had the opportunity to contribute as much as they want
 
 * **Arnaud--Mozdzer Bastien** - *Team leader - Java/UML developer* - [BastienAM](https://github.com/BastienAM)
 * **Salerno Damien** - *Java/UML developer - Specification writer* - [Nrkz](https://github.com/Nrkz)
-* **Poilane Arthur** - *Java/UML developer - Specification writer* - [TuVeuxVoirMaBIG](https://github.com/TuVeuxVoirMaBIG)
+* **Poilane Arthur** - *Java/UML developer - Specification writer* - [ws-palone](https://github.com/ws-palone)
 * **Bruhammer Mélina** - *Java/UML developer - Specification writer* - [MelinaBHMR](https://github.com/MelinaBHMR)
 * **Sarrazin Quentin** - *Java/UML developer - Specification writer* - [QuentinSarra](https://github.com/QuentinSarra)
 
