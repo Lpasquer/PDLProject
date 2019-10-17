@@ -18,7 +18,7 @@ public class PageCheckerTest
 {
 
     /**
-     * Vérifie si la page testée existe
+     * Vï¿½rifie si la page testï¿½e existe
      */
     @Test
     public void existingPagesTest_withHttps()
@@ -36,8 +36,8 @@ public class PageCheckerTest
     }
 
     /**
-     * Vérifie si une page testée sans http peut être testée
-     * (la fonction ajoute elle même le http manquant)
+     * Vï¿½rifie si une page testï¿½e sans http peut ï¿½tre testï¿½e
+     * (la fonction ajoute elle mï¿½me le http manquant)
      */
     @Test
     public void existingPagesTest_WithoutHttps()
@@ -60,14 +60,13 @@ public class PageCheckerTest
     }
 
     /**
-     * Vérifie si la page est valide ou non
+     * Vï¿½rifie si la page est valide ou non
      */
     @Test
     public void pageNotValid()
     {
         List<String> urlToTest = new ArrayList<>();
         urlToTest.add("https://forum.xda-developers.com/");
-        urlToTest.add("https://fr.wikipedia.com/");
         urlToTest.add("https://github.com/vad101010/PDLProject");
         urlToTest.add("https://www.google.fr/");
         for (String url : urlToTest)
