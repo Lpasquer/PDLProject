@@ -35,19 +35,19 @@ public class ExtractorTest
     {
         extractorhtml = new HTMLExtractor();
         extractorwiki = new WikiTextExtractor();
-        UrlWithTables = "https://fr.wikipedia.org/wiki/Championnat_d%27Allemagne_f%C3%A9minin_de_handball";
+        UrlWithTables = "https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522";
         liens = new ArrayList<>();
-        liens.add("https://fr.wikipedia.org/wiki/Th%C3%BCringer_HC");
-        liens.add("https://fr.wikipedia.org/wiki/Championnat_d%27Allemagne_f%C3%A9minin_de_handball");
-        liens.add("https://fr.wikipedia.org/wiki/Parti_communiste_de_l%27Union_sovi%C3%A9tique");
-        liens.add("https://fr.wikipedia.org/wiki/Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques");
-        liens.add("https://fr.wikipedia.org/wiki/Oulan-Bator");
+        liens.add("https://fr.wikipedia.org/w/index.php?title=Th%C3%BCringer_HC&oldid=161132172");
+        liens.add("https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522");
+        liens.add("https://fr.wikipedia.org/w/index.php?title=Parti_communiste_de_l%27Union_sovi%C3%A9tique&oldid=160293234");
+        liens.add("https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866");
+        liens.add("https://fr.wikipedia.org/w/index.php?title=Oulan-Bator&oldid=163654075");
         nbtabliens = new HashMap<>();
-        nbtabliens.put("https://fr.wikipedia.org/wiki/Th%C3%BCringer_HC", 0);
-        nbtabliens.put("https://fr.wikipedia.org/wiki/Championnat_d%27Allemagne_f%C3%A9minin_de_handball", 5);
-        nbtabliens.put("https://fr.wikipedia.org/wiki/Parti_communiste_de_l%27Union_sovi%C3%A9tique", 3);
-        nbtabliens.put("https://fr.wikipedia.org/wiki/Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques", 1);
-        nbtabliens.put("https://fr.wikipedia.org/wiki/Oulan-Bator", 1);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Th%C3%BCringer_HC&oldid=161132172", 1);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522", 5);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Parti_communiste_de_l%27Union_sovi%C3%A9tique&oldid=160293234", 3);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866", 1);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Oulan-Bator&oldid=163654075", 1);
         csvTest = new ArrayList<>();
         for (int i = 1; i < 6; i++)
         {
