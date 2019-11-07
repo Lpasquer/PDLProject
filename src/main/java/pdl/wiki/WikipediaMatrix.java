@@ -3,13 +3,14 @@ package pdl.wiki;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Classe principale avec l'interface utilisateur
  */
 public class WikipediaMatrix
 {
-    private static String savePath = System.getProperty("user.home");
+    private static String savePath = readSaveLocation();
     private static ArrayList<Page> pages = new ArrayList<>();
     private static ArrayList<Url> urls = new ArrayList<>();
 
@@ -157,11 +158,14 @@ public class WikipediaMatrix
         boolean exists = false;
         while (!exists)
         {
-            System.out.println("Entrez le chemin de sauvegarde des CSV");
+            System.out.println("Entrez un chemin valide vers votre fichier de sauvegarde des CSV");
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             try
-            {
-                savePath = reader.readLine();
+            {	
+            	savePath = reader.readLine();
+				PrintWriter printwriter = new PrintWriter(new FileOutputStream(System.getProperty("user.dir") + "/src/main/java/pdl/wiki/SavePath.txt"));
+				printwriter.println(savePath);
+            	printwriter.close();
             }
             catch (IOException e)
             {
@@ -171,6 +175,30 @@ public class WikipediaMatrix
             exists = Dir.exists();
         }
     }
+
+    
+    /**
+     * 
+     * @return le chemin de sauvegarde des csv
+     */
+    private static String readSaveLocation() {
+  		try {
+  			Scanner scan;
+  			String resultat;
+  			scan = new Scanner(new File(System.getProperty("user.dir") + "/src/main/java/pdl/wiki/SavePath.txt"));
+  			if(scan.hasNext()) {
+  				resultat = scan.next();
+  			}else {
+  				resultat = System.getProperty("user.dir") + "/csv_saves";
+  			}
+  			scan.close();
+  			return resultat;
+  		} catch (FileNotFoundException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();
+  	    	return "Le fichier 'SavePath' contenant le chemin de sauvegarde est introuvable.";
+  		}
+      }
 
     /**
      * Sauvegarde les CSV trouvé dans le lieu de stockage enregistré
