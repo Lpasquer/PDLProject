@@ -16,167 +16,31 @@ public class WikipediaMatrix
 
     public static void main(String[] args)
     {
-        System.out.println("Bonjour !");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int choix = -1;
-        while (true)
-        {
-            int nbcsv = 0;
-            for (Url url : urls)
-            {
-                if (url.isValid())
-                {
-                    nbcsv += url.getTableCount();
-                }
-            }
-            System.out.println("Les CSV seront sauvegardés sous : '" + savePath + "'");
-            System.out.println("Nombre de tableau(x) trouvé(s) : " + nbcsv);
-            System.out.println("Veuillez choisir une option parmi :");
-            System.out.println("1. Lister les liens");
-            System.out.println("2. Ajouter un lien (Wikipedia)");
-            System.out.println("3. Retirer un lien");
-            System.out.println("4. Changer le lieu de sauvegarde");
-            if (nbcsv > 0)
-            {
-                System.out.println("5. Sauvegarder les tableaux (au format CSV) et quitter");
-            }
-            System.out.println("0. Quitter sans sauvegarder");
-            System.out.println("Votre choix ?");
-            try
-            {
-                String strchoix = reader.readLine();
-                if (tryParseInt(strchoix))
-                {
-                    choix = Integer.parseInt(strchoix);
-                }
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            switch (choix)
-            {
-                case 0:
-                    System.exit(0);
-                    break;
-                case 1:
-                    linkList();
-                    break;
-                case 2:
-                    addLink();
-                    break;
-                case 3:
-                    removeLink();
-                    break;
-                case 4:
-                    changeSaveLocation();
-                    break;
-                case 5:
-                    if (nbcsv > 0)
-                    {
-                        saveCSV();
-                        System.exit(0);
-                        break;
-                    }
-                default:
-                    System.out.println("Veuillez faire un choix entre 0 et 5");
-            }
-        }
+    	try {
+  			Scanner scan;
+  			String lien;
+  			scan = new Scanner(new File(System.getProperty("user.dir") + "/wikipedia_links_list.txt"));
+  			while(scan.hasNext()) {
+  				lien = scan.next();
+  				addLink(lien);
+  			}
+  			scan.close();
+  			saveCSV();
+  		} catch (FileNotFoundException e) {
+  			// TODO Auto-generated catch block
+  			e.printStackTrace();	
+  		}
     }
 
-    /**
-     * Liste les liens ajoutés par l'utilisateur
-     */
-    private static void linkList()
-    {
-        if (urls.size() == 0)
-        {
-            System.out.println("Aucun lien enregistré");
-        }
-        for (Url url : urls) { System.out.println(url.toString()); }
-    }
 
     /**
-     * Propose à l'utilisateur d'ajouter un lien
+     * ajoute un lien dans la liste des liens à traiter
      */
-    private static void addLink()
+    private static void addLink(String lien)
     {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Collez le lien (CTRL+V):");
-        try
-        {
-            String lien = reader.readLine();
             urls.add(new Url(lien));
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
     }
 
-    /**
-     * propose de retirer un lien parmis la liste à l'utilisateur
-     */
-    private static void removeLink()
-    {
-        if (urls.size() == 0)
-        {
-            System.out.println("Aucun lien enregistré");
-            return;
-        }
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("Liste des liens enregistrés:");
-        for (int i = 0; i < urls.size(); i++)
-        {
-            System.out.println(i + ". " + urls.get(i).toString());
-        }
-        try
-        {
-            int numlien = urls.size();
-            while (numlien >= urls.size() || numlien < 0)
-            {
-                System.out.println("Numéro du lien à supprimer ?");
-                String strnumlien = reader.readLine();
-                if (tryParseInt(strnumlien))
-                {
-                    numlien = Integer.parseInt(strnumlien);
-                }
-            }
-            urls.remove(numlien);
-        }
-        catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Propose à l'utilisateur un nouveau lieu de stockage pour ses sauvegarde de CSV
-     */
-    private static void changeSaveLocation()
-    {
-        boolean exists = false;
-        while (!exists)
-        {
-            System.out.println("Entrez un chemin valide vers votre fichier de sauvegarde des CSV");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            try
-            {	
-            	savePath = reader.readLine();
-				PrintWriter printwriter = new PrintWriter(new FileOutputStream(System.getProperty("user.dir") + "/src/main/java/pdl/wiki/SavePath.txt"));
-				printwriter.println(savePath);
-            	printwriter.close();
-            }
-            catch (IOException e)
-            {
-                e.printStackTrace();
-            }
-            File Dir = new File(savePath);
-            exists = Dir.exists();
-        }
-    }
-
-    
     /**
      * 
      * @return le chemin de sauvegarde des csv
@@ -189,14 +53,14 @@ public class WikipediaMatrix
   			if(scan.hasNext()) {
   				resultat = scan.next();
   			}else {
-  				resultat = System.getProperty("user.dir") + "/csv_saves";
+  				resultat = System.getProperty("user.dir") + "/output";
   			}
   			scan.close();
   			return resultat;
   		} catch (FileNotFoundException e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
-  	    	return "Le fichier 'SavePath' contenant le chemin de sauvegarde est introuvable.";
+  	    	return "Le fichier 'SavePath.txt' contenant le chemin de sauvegarde est introuvable.";
   		}
       }
 
@@ -218,32 +82,6 @@ public class WikipediaMatrix
             }
         }
         pagestoFile();
-        /*for (int i = 0; i < 2; i++)
-        {
-            String dirname = "";
-            switch (i)
-            {
-                case 0:
-                    extractor = new HTMLExtractor();
-                    dirname = "html";
-                    break;
-                case 1:
-                    extractor = new WikiTextExtractor();
-                    dirname = "wikitext";
-            }
-            for (Url url : urls)
-            {
-                System.out.println(dirname + " - " + urls.size());
-                if (url.getTableCount() > 0)
-                {
-                    Page page = new Page(url);
-                    page.setCsvListHtml(extractor.getCSV(url));
-                    page.setCsvListWikitext(extractor.getCSV(url));
-                    pages.add(page);
-                }
-            }
-            PagetoFile(dirname);
-        }*/
     }
 
     /**
