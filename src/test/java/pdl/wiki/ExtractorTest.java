@@ -1,6 +1,10 @@
 package pdl.wiki;
 
 import org.apache.commons.io.FileUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -29,6 +33,7 @@ public class ExtractorTest
     List<List<String>> csvwiki;
     List<List<String>> csvhtml;
     List<String> csvTest;
+    Map<String,Map<String,Integer>> cellsTest;
 
     @BeforeEach
     public void setUp() throws Exception
@@ -53,6 +58,8 @@ public class ExtractorTest
         {
             csvTest.add(FileUtils.readFileToString(new File("inputdata" + File.separator + "PDL" + i + ".csv")));
         }
+        cellsTest = new HashMap<>();
+        
     }
 
     @Test
@@ -83,9 +90,13 @@ public class ExtractorTest
         csvhtml = extractorhtml.getCSV(new Url(UrlWithTables));
         for (int i = 0; i < 5; i++)
         {
-        	int htmlsize = csvhtml.get(i).size();
-        	int csvsize =countCsvLines(csvTest.get(i), false);
-            assertTrue(csvhtml.get(i).size() == countCsvLines(csvTest.get(i), false), "Nombre de lignes du CSV différent trouvé (HTML), reçu :" + htmlsize + "; prévu :" + csvsize);
+        	int htmlsizeLig = csvhtml.get(i).size();
+        	int csvsizeLig =countCsvLines(csvTest.get(i));
+            assertTrue(htmlsizeLig ==csvsizeLig, "Nombre de lignes du CSV différent trouvé (HTML), prévu :" + htmlsizeLig + "; reçu :" + csvsizeLig);
+            int csvsizeCol = countCsvCol(csvTest.get(i));
+            numcol = colNumber(UrlWithTables);
+            int htmlsizeCol = numcol.get(i);
+            assertTrue(htmlsizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + htmlsizeCol + "; reçu :" + csvsizeCol);
         }
     }
     
@@ -96,18 +107,18 @@ public class ExtractorTest
         for (int i = 0; i < 5; i++)
         {
         	int wikisize = csvwiki.get(i).size();
-        	int csvsize =countCsvLines(csvTest.get(i), false);
-            assertTrue(countCsvLines(csvwiki.get(i).get(0), true) == countCsvLines(csvTest.get(i), true), "Nombre de colonnes du CSV différent trouvé (Wiki), reçu :" + wikisize + "; prévu :" + csvsize);
+        	int csvsize =countCsvLines(csvTest.get(i));
+            assertTrue(wikisize == csvsize, "Nombre de colonnes du CSV différent trouvé (Wiki), prévu :" + wikisize + "; reçu :" + csvsize);
         }
     }
     //retourne le nombre de lignes ou colonnes du fichier text CSV
-    private int countCsvLines(String csv, boolean col) throws IOException
+    private int countCsvLines(String csv) throws IOException
     {
         InputStream is = new ByteArrayInputStream(csv.getBytes());
         try
         {
             byte[] c = new byte[1024];
-            int nbLigCol = 0;
+            int nbLig = 0;
             int nbCharLu = 0;
             boolean fichierVide = true;
             while ((nbCharLu = is.read(c)) != -1)
@@ -115,34 +126,69 @@ public class ExtractorTest
                 fichierVide = false;
                 for (int i = 0; i < nbCharLu; ++i)
                 {
-                    if (col)
-                    {
                         if (c[i] == '\n')
                         {
-                            return nbLigCol;
+                            nbLig++;
                         }
-                        else if (c[i] == ';')
-                        {
-                            nbLigCol++;
-                        }
-                    }
-                    else
-                    {
-                        if (c[i] == '\n')
-                        {
-                            nbLigCol++;
-                        }
-                    }
+                    
                 }
             }
-            return (nbLigCol == 0 && !fichierVide) ? 1 : nbLigCol;
+            return (nbLig == 0 && !fichierVide) ? 1 : nbLig;
         }
         finally
         {
             is.close();
         }
     }
-
+    
+    private int countCsvCol(String csv) throws IOException
+    {
+        InputStream is = new ByteArrayInputStream(csv.getBytes());
+        try
+        {
+            byte[] c = new byte[1024];
+            int nbCol = 1;
+            int nbCharLu = 0;
+            boolean fichierVide = true;
+            while ((nbCharLu = is.read(c)) != -1)
+            {
+                fichierVide = false;
+                for (int i = 0; i < nbCharLu; ++i)
+                {
+                    if (c[i] == ';')
+                        {
+                            nbCol++;
+                        }
+                    else if(c[i] == '\n') {
+                    	return nbCol;
+                    }
+                }
+                  
+            }
+            return (nbCol == 0 && !fichierVide) ? 1 : nbCol;
+        }
+        finally
+        {
+            is.close();
+        }
+    }
+    
+    Map<Integer,Integer> numcol;
+    
+    public  Map<Integer, Integer> colNumber(String url) throws IOException {
+    	Document page = Jsoup.connect(url).get();
+        // Récupération des tableaux de Wikipedia via le selecteur css sur la classe wikitable propre aux tableaux
+        Elements tables = page.select(".wikitable");
+        numcol = new HashMap();
+        for (int i = 0; i<5;i++ )
+        {
+            // On compte le nombre de cases fusionnées afin d'en ignorer les tableaux parents
+            int nbcol = (tables.select("td").size()+tables.select("th").size())/tables.select("tr").size();
+            numcol.put(i,nbcol);
+            
+        }
+        return numcol;
+    }
 //    @After
 //    public void Check()
 //    {
