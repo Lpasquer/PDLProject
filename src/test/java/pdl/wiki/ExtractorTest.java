@@ -106,11 +106,17 @@ public class ExtractorTest
         csvwiki = extractorwiki.getCSV(new Url(UrlWithTables));
         for (int i = 0; i < 5; i++)
         {
-        	int wikisize = csvwiki.get(i).size();
-        	int csvsize =countCsvLines(csvTest.get(i));
-            assertTrue(wikisize == csvsize, "Nombre de colonnes du CSV différent trouvé (Wiki), prévu :" + wikisize + "; reçu :" + csvsize);
+        	int wikisizeLig = csvwiki.get(i).size();
+        	int csvsizeLig =countCsvLines(csvTest.get(i));
+            assertTrue(wikisizeLig == csvsizeLig, "Nombre de lignes du CSV différent trouvé (Wiki), prévu :" + wikisizeLig + "; reçu :" + csvsizeLig);
+            int csvsizeCol = countCsvCol(csvTest.get(i));
+            numcol = colNumber(UrlWithTables);
+            int wikisizeCol = numcol.get(i);
+            assertTrue(wikisizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + wikisizeCol + "; reçu :" + csvsizeCol);
+                
         }
     }
+ 
     //retourne le nombre de lignes ou colonnes du fichier text CSV
     private int countCsvLines(String csv) throws IOException
     {
@@ -177,15 +183,30 @@ public class ExtractorTest
     
     public  Map<Integer, Integer> colNumber(String url) throws IOException {
     	Document page = Jsoup.connect(url).get();
-        // Récupération des tableaux de Wikipedia via le selecteur css sur la classe wikitable propre aux tableaux
         Elements tables = page.select(".wikitable");
-        numcol = new HashMap();
-        for (int i = 0; i<5;i++ )
+        numcol = new HashMap<Integer, Integer>();
+        int i = 0;
+        
+        for (Element table : tables)
         {
-            // On compte le nombre de cases fusionnées afin d'en ignorer les tableaux parents
-            int nbcol = (tables.select("td").size()+tables.select("th").size())/tables.select("tr").size();
+        	int tot = 0;
+        	for (Element colspan :table.select("td")) {
+        		String valcol = colspan.attr("colspan");
+        		if(valcol !="")tot += Integer.parseInt(valcol)-1;
+        		String valrow = colspan.attr("rowspan");
+        		if(valrow !="")tot += Integer.parseInt(valrow)-1;
+        	}
+        	//String colspan = table.select("td").attr("colspan");
+        	for(Element thcolspan : table.select("th")) {
+        		String valcol = thcolspan.attr("colspan");
+        		if(valcol != "")tot += Integer.parseInt(valcol)-1;
+        		String valrow = thcolspan.attr("rowspan");
+        		if(valrow !="")tot += Integer.parseInt(valrow)-1;
+        	}
+            int nbcol = (table.select("td").size()+table.select("th").size()+tot)/table.select("tr").size();
             numcol.put(i,nbcol);
-            
+            System.out.println(nbcol);
+            i++;
         }
         return numcol;
     }
