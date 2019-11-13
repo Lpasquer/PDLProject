@@ -153,7 +153,7 @@ public class WikipediaMatrixInterface
     /**
      * Propose à l'utilisateur un nouveau lieu de stockage pour ses sauvegarde de CSV
      */
-    private static void changeSaveLocation()
+    public static void changeSaveLocation()
     {
         boolean exists = false;
         while (!exists)
@@ -163,7 +163,7 @@ public class WikipediaMatrixInterface
             try
             {	
             	savePath = reader.readLine();
-				PrintWriter printwriter = new PrintWriter(new FileOutputStream(System.getProperty("user.dir") + "/src/main/java/pdl/wiki/SavePath.txt"));
+				PrintWriter printwriter = new PrintWriter(new FileOutputStream(System.getProperty("user.dir") + "/save_path.txt"));
 				printwriter.println(savePath);
             	printwriter.close();
             }
@@ -181,22 +181,24 @@ public class WikipediaMatrixInterface
      * 
      * @return le chemin de sauvegarde des csv
      */
-    private static String readSaveLocation() {
+    public static String readSaveLocation() {
   		try {
   			Scanner scan;
   			String resultat;
-  			scan = new Scanner(new File(System.getProperty("user.dir") + "/src/main/java/pdl/wiki/SavePath.txt"));
+  			scan = new Scanner(new File(System.getProperty("user.dir") + "/save_path.txt"));
   			if(scan.hasNext()) {
   				resultat = scan.next();
+  				File Dir = new File(resultat);
+  	            if(!Dir.exists()) resultat = "Le chemin de sauvegarde n'est pas valide";
   			}else {
-  				resultat = System.getProperty("user.dir") + "/csv_saves";
+  				resultat = System.getProperty("user.dir") + "/output";
   			}
   			scan.close();
   			return resultat;
   		} catch (FileNotFoundException e) {
   			// TODO Auto-generated catch block
   			e.printStackTrace();
-  	    	return "Le fichier 'SavePath' contenant le chemin de sauvegarde est introuvable.";
+  	    	return "Le fichier 'save_path.txt' contenant le chemin de sauvegarde est introuvable.";
   		}
       }
 
