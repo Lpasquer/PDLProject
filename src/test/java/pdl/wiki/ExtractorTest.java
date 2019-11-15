@@ -1,4 +1,4 @@
-package pdl.wiki;
+ package pdl.wiki;
 
 import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.lang.String;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -97,6 +98,9 @@ public class ExtractorTest
             numcol = colNumber(UrlWithTables);
             int htmlsizeCol = numcol.get(i);
             assertTrue(htmlsizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + htmlsizeCol + "; reçu :" + csvsizeCol);
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
         }
     }
     
@@ -113,7 +117,9 @@ public class ExtractorTest
             numcol = colNumber(UrlWithTables);
             int wikisizeCol = numcol.get(i);
             assertTrue(wikisizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + wikisizeCol + "; reçu :" + csvsizeCol);
-                
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
         }
     }
  
@@ -180,6 +186,7 @@ public class ExtractorTest
     }
     
     Map<Integer,Integer> numcol;
+	private String[][] tab;
     
     public  Map<Integer, Integer> colNumber(String url) throws IOException {
     	Document page = Jsoup.connect(url).get();
@@ -196,7 +203,6 @@ public class ExtractorTest
         		String valrow = colspan.attr("rowspan");
         		if(valrow !="")tot += Integer.parseInt(valrow)-1;
         	}
-        	//String colspan = table.select("td").attr("colspan");
         	for(Element thcolspan : table.select("th")) {
         		String valcol = thcolspan.attr("colspan");
         		if(valcol != "")tot += Integer.parseInt(valcol)-1;
@@ -205,11 +211,82 @@ public class ExtractorTest
         	}
             int nbcol = (table.select("td").size()+table.select("th").size()+tot)/table.select("tr").size();
             numcol.put(i,nbcol);
-            System.out.println(nbcol);
+            //System.out.println(nbcol);
             i++;
         }
         return numcol;
     }
+    
+    
+    public  String textCells(String url, int tableau, int lignes, int cols) throws IOException {
+    	Document page = Jsoup.connect(url).get();
+        Elements tables = page.select(".wikitable");
+        int i = 0;
+        
+        for (Element table : tables)
+        {
+        	if(i == tableau) {
+        		int j =0;
+        		tab = new String[30][30]; 
+	        	for (Element ligne : table.select("tr")) {
+	        		int c=0;
+        			for(Element cellule : ligne.select("td, th")) {
+	        			if(cellule.attr("rowspan") != "") {
+    	        			String rowValue = cellule.text();
+        					int cellsRows = Integer.parseInt(cellule.attr("rowspan"))+j;
+        					for(int lig = j; lig<cellsRows; lig++) {
+        						tab[lig][c]=rowValue;
+        					}
+	        			}else if(cellule.attr("colspan") != "") {
+	        				String colValue = cellule.text();
+        					int cellsCols = Integer.parseInt(cellule.attr("colspan"))+c;
+        					for (int col = c; col<cellsCols;col++) {
+    	        				tab[j][col]=colValue;
+        					}
+	        			}else {
+	        				while(tab[j][c] != null) {
+	        					c++;
+	        				}
+        					String cellValue = cellule.text();
+	        				tab[j][c]=cellValue;
+	        			}
+	        			c++;
+	        		}
+	        		j++;
+	        	}
+	        	return tab[lignes][cols];
+        	}i++;
+        }
+        return "Rien";
+    }
+    
+	public String getString(List<String> csvTest,int tb,int lignes, int cols) throws IOException{
+		String csv = csvTest.get(tb);
+    	InputStream is = new ByteArrayInputStream(csv.getBytes());
+        try
+        {
+            byte[] c = new byte[1024];
+            int nbCol = 1;
+            int nbCharLu = 0;
+            boolean fichierVide = true;
+            while ((nbCharLu = is.read(c)) != -1)
+            {
+                fichierVide = false;
+                String res = new String (c);
+                String tablig[] =res.split("/n");
+                String strglig = tablig[lignes];
+                String tabcol[] = strglig.split(";");
+                String strgcol = tabcol[cols];
+                return strgcol;
+            }
+            return "Rien";
+        }
+        finally
+        {
+            is.close();
+        }
+    }
+
 //    @After
 //    public void Check()
 //    {
