@@ -24,10 +24,10 @@ public class PageCheckerTest
     public void existingPagesTest_withHttps()
     {
         Map<String, Integer> urlMap = new HashMap<>();
-        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314", 1);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314", 5);
         urlMap.put("https://fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
-        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 0);
-        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 3);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
         urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
         for (Map.Entry set : urlMap.entrySet())
         {
@@ -43,14 +43,14 @@ public class PageCheckerTest
     public void existingPagesTest_WithoutHttps()
     {
         Map<String, Integer> urlMap = new HashMap<>();
-        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314", 1);
-        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314", 1);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314",  5);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314",  5);
         urlMap.put("http://fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
         urlMap.put("fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
-        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 0);
-        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 0);
-        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 3);
-        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 3);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
         urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
         urlMap.put("fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
         for (Map.Entry set : urlMap.entrySet())
