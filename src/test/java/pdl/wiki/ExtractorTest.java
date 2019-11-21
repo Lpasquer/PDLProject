@@ -49,7 +49,7 @@ public class ExtractorTest
         liens.add("https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866");
         liens.add("https://fr.wikipedia.org/w/index.php?title=Oulan-Bator&oldid=163654075");
         nbtabliens = new HashMap<>();
-        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Th%C3%BCringer_HC&oldid=161132172", 1);
+        nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Th%C3%BCringer_HC&oldid=161132172", 2);
         nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522", 6);
         nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Parti_communiste_de_l%27Union_sovi%C3%A9tique&oldid=160293234", 3);
         nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866", 2);
@@ -70,7 +70,7 @@ public class ExtractorTest
         for (String lien : liens)
         {
             int htmlSize = extractorhtml.getCSV(new Url(lien)).size();
-            assertTrue( nbtabliens.get(lien) == htmlSize,"nombre de tableau trouvé incorrecte (extractor HTML, lien:" + lien + "; prévu : )" + nbtabliens.get(lien) + ", reçu : " + htmlSize);
+            assertTrue( nbtabliens.get(lien) == htmlSize,"nombre de tableau trouvé incorrecte (extractor HTML, lien:" + lien + "; prévu : " + nbtabliens.get(lien) + ", reçu : " + htmlSize +")");
         }
     }
     
@@ -81,7 +81,7 @@ public class ExtractorTest
         for (String lien : liens)
         {
             int wikitextSize = extractorwiki.getCSV(new Url(lien)).size();
-            assertTrue( nbtabliens.get(lien) == wikitextSize,"nombre de tableau trouvé incorrecte (extractor wiki, lien:" + lien + "; prévu : )" + nbtabliens.get(lien) + ", reçu : " + wikitextSize);
+            assertTrue( nbtabliens.get(lien) == wikitextSize,"nombre de tableau trouvé incorrecte (extractor wiki, lien:" + lien + "; prévu : " + nbtabliens.get(lien) + ", reçu : " + wikitextSize +")");
         }
     }
 
@@ -98,9 +98,9 @@ public class ExtractorTest
             numcol = colNumber(UrlWithTables);
             int htmlsizeCol = numcol.get(i);
             assertTrue(htmlsizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + htmlsizeCol + "; reçu :" + csvsizeCol);
-            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
         }
     }
     
@@ -117,9 +117,9 @@ public class ExtractorTest
             numcol = colNumber(UrlWithTables);
             int wikisizeCol = numcol.get(i);
             assertTrue(wikisizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + wikisizeCol + "; reçu :" + csvsizeCol);
-            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
         }
     }
  
@@ -270,7 +270,6 @@ public class ExtractorTest
                 String strglig = tablig[lignes];
                 String tabcol[] = strglig.split(";");
                 String strgcol = tabcol[cols];
-                System.out.println(strgcol);
                 return strgcol;
             }
             
