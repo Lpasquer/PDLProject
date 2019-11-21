@@ -185,34 +185,27 @@ public class ExtractorTest
         }
     }
     
+
     Map<Integer,Integer> numcol;
 	private String[][] tab;
-    
-    public  Map<Integer, Integer> colNumber(String url) throws IOException {
+
+    public  ArrayList<Integer> colNumber(String url) throws IOException {
     	Document page = Jsoup.connect(url).get();
         Elements tables = page.select(".wikitable");
-        numcol = new HashMap<Integer, Integer>();
-        int i = 0;
+        numcol = new ArrayList<Integer>();
         
         for (Element table : tables)
         {
         	int tot = 0;
-        	for (Element colspan :table.select("td")) {
+        	for (Element colspan :table.select("td, th")) {
         		String valcol = colspan.attr("colspan");
         		if(valcol !="")tot += Integer.parseInt(valcol)-1;
         		String valrow = colspan.attr("rowspan");
         		if(valrow !="")tot += Integer.parseInt(valrow)-1;
         	}
-        	for(Element thcolspan : table.select("th")) {
-        		String valcol = thcolspan.attr("colspan");
-        		if(valcol != "")tot += Integer.parseInt(valcol)-1;
-        		String valrow = thcolspan.attr("rowspan");
-        		if(valrow !="")tot += Integer.parseInt(valrow)-1;
-        	}
-            int nbcol = (table.select("td").size()+table.select("th").size()+tot)/table.select("tr").size();
-            numcol.put(i,nbcol);
-            //System.out.println(nbcol);
-            i++;
+
+            int nbcol = (table.select("td, th").size()+tot)/table.select("tr").size();
+            numcol.add(nbcol);
         }
         return numcol;
     }
