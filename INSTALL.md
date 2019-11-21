@@ -21,6 +21,10 @@ Change directory to be in the project.
 cd PDLProject
 ```
 
+There is two files in the root folder you can edit to parametrized the extractor : 
+- Use wikipedia_links_list.txt file to stock the urls you need to extract. 
+- Use save_path.txt file to change the saving folder (make sure to put a right path). 
+
 ### Launch the project with maven
 Use the following commands.
 
