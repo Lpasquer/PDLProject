@@ -254,7 +254,7 @@ public class ExtractorTest
     }
     
 	public String getString(List<String> csvTest,int tb,int lignes, int cols) throws IOException{
-		String csv = csvTest.get(tb);
+		String csv = csvTest.get(tb-1);
     	InputStream is = new ByteArrayInputStream(csv.getBytes());
         try
         {
@@ -272,7 +272,6 @@ public class ExtractorTest
                 String strgcol = tabcol[cols];
                 System.out.println(strgcol);
                 return strgcol;
-                
             }
             
             return "Rien";
