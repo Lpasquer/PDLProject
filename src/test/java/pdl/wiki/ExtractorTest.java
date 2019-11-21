@@ -277,8 +277,11 @@ public class ExtractorTest
                 String strglig = tablig[lignes];
                 String tabcol[] = strglig.split(";");
                 String strgcol = tabcol[cols];
+                System.out.println(strgcol);
                 return strgcol;
+                
             }
+            
             return "Rien";
         }
         finally
