@@ -186,13 +186,13 @@ public class ExtractorTest
     }
     
 
-    Map<Integer,Integer> numcol;
+    ArrayList<Integer> numcol;
 	private String[][] tab;
 
     public  ArrayList<Integer> colNumber(String url) throws IOException {
     	Document page = Jsoup.connect(url).get();
         Elements tables = page.select(".wikitable");
-        numcol = new ArrayList<Integer>();
+        numcol = new  ArrayList<Integer>();
         
         for (Element table : tables)
         {
