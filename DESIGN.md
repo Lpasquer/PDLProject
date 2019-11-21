@@ -29,6 +29,6 @@ The first package contains Extractor.java, an interface implemented by two class
 ### Use Case
 
 ![](/media/Use_Case.jpg)
-- The user can enter a Wikipedia link in the application to retrieve the tables from this page. He can add and remove several.
-- The user chooses to save the tables or not.
-- The user changes the tables backup directory.
+- The user can put Wikipedia links in wikipedia_links_list.txt file to extract the tables from the page. He can add and remove several.
+- The user can choose the backup path to save the tables in save_path.txt file.
+
