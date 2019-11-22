@@ -18,17 +18,17 @@ public class PageCheckerTest
 {
 
     /**
-     * Vérifie si la page testée existe
+     * Vï¿½rifie si la page testï¿½e existe
      */
     @Test
     public void existingPagesTest_withHttps()
     {
         Map<String, Integer> urlMap = new HashMap<>();
-        urlMap.put("https://fr.wikipedia.org/wiki/Jeux_olympiques_d'Ã©tÃ©", 2);
-        urlMap.put("https://fr.wikipedia.org/wiki/WikipÃ©dia:Accueil_principal", 0);
-        urlMap.put("https://fr.wikipedia.org/wiki/Jeux_olympiques", 0);
-        urlMap.put("https://fr.wikipedia.org/wiki/Jeux_olympiques_d'hiver", 4);
-        urlMap.put("https://fr.wikipedia.org/wiki/Jean_Capdouze", 1);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314", 5);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
+        urlMap.put("https://fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
         for (Map.Entry set : urlMap.entrySet())
         {
             assertEquals((int) set.getValue(), PageChecker.urlCheck(set.getKey().toString()).size());
@@ -36,23 +36,23 @@ public class PageCheckerTest
     }
 
     /**
-     * Vérifie si une page testée sans http peut être testée
-     * (la fonction ajoute elle même le http manquant)
+     * Vï¿½rifie si une page testï¿½e sans http peut ï¿½tre testï¿½e
+     * (la fonction ajoute elle mï¿½me le http manquant)
      */
     @Test
     public void existingPagesTest_WithoutHttps()
     {
         Map<String, Integer> urlMap = new HashMap<>();
-        urlMap.put("http://fr.wikipedia.org/wiki/Jeux_olympiques_d'Ã©tÃ©", 2);
-        urlMap.put("fr.wikipedia.org/wiki/Jeux_olympiques_d'Ã©tÃ©", 2);
-        urlMap.put("http://fr.wikipedia.org/wiki/WikipÃ©dia:Accueil_principal", 0);
-        urlMap.put("fr.wikipedia.org/wiki/WikipÃ©dia:Accueil_principal", 0);
-        urlMap.put("http://fr.wikipedia.org/wiki/Jeux_olympiques", 0);
-        urlMap.put("fr.wikipedia.org/wiki/Jeux_olympiques", 0);
-        urlMap.put("http://fr.wikipedia.org/wiki/Jeux_olympiques_d'hiver", 4);
-        urlMap.put("fr.wikipedia.org/wiki/Jeux_olympiques_d'hiver", 4);
-        urlMap.put("http://fr.wikipedia.org/wiki/Jean_Capdouze", 1);
-        urlMap.put("fr.wikipedia.org/wiki/Jean_Capdouze", 1);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314",  5);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27%C3%A9t%C3%A9&oldid=163777314",  5);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Wikip%C3%A9dia:Accueil_principal&oldid=155532403", 0);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques&oldid=163506830", 3);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jeux_olympiques_d%27hiver&oldid=161852389", 6);
+        urlMap.put("http://fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
+        urlMap.put("fr.wikipedia.org/w/index.php?title=Jean_Capdouze&oldid=162701968", 1);
         for (Map.Entry set : urlMap.entrySet())
         {
             assertEquals((int) set.getValue(), PageChecker.urlCheck(set.getKey().toString()).size());
@@ -60,14 +60,13 @@ public class PageCheckerTest
     }
 
     /**
-     * Vérifie si la page est valide ou non
+     * Vï¿½rifie si la page est valide ou non
      */
     @Test
     public void pageNotValid()
     {
         List<String> urlToTest = new ArrayList<>();
         urlToTest.add("https://forum.xda-developers.com/");
-        urlToTest.add("https://fr.wikipedia.com/");
         urlToTest.add("https://github.com/vad101010/PDLProject");
         urlToTest.add("https://www.google.fr/");
         for (String url : urlToTest)
