@@ -55,7 +55,7 @@ public class ExtractorTest
         nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866", 2);
         nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Oulan-Bator&oldid=163654075", 1);
         csvTest = new ArrayList<>();
-        for (int i = 1; i < 6; i++)
+        for (int i = 1; i < 7; i++)
         {
             csvTest.add(FileUtils.readFileToString(new File("inputdata" + File.separator + "PDL" + i + ".csv")));
         }
@@ -89,18 +89,18 @@ public class ExtractorTest
     public void getCSV2HTML() throws IOException
     {
         csvhtml = extractorhtml.getCSV(new Url(UrlWithTables));
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
         	int htmlsizeLig = csvhtml.get(i).size();
         	int csvsizeLig =countCsvLines(csvTest.get(i));
-            assertTrue(htmlsizeLig ==csvsizeLig, "Nombre de lignes du CSV différent trouvé (HTML), prévu :" + htmlsizeLig + "; reçu :" + csvsizeLig);
+            assertTrue(htmlsizeLig == csvsizeLig, "Nombre de lignes du CSV différent trouvé (HTML), prévu :" + htmlsizeLig + "; reçu :" + csvsizeLig);
             int csvsizeCol = countCsvCol(csvTest.get(i));
             numcol = colNumber(UrlWithTables);
             int htmlsizeCol = numcol.get(i);
             assertTrue(htmlsizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + htmlsizeCol + "; reçu :" + csvsizeCol);
-            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
         }
     }
     
@@ -108,7 +108,7 @@ public class ExtractorTest
     public void getCSV2WikiText() throws IOException
     {
         csvwiki = extractorwiki.getCSV(new Url(UrlWithTables));
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 6; i++)
         {
         	int wikisizeLig = csvwiki.get(i).size();
         	int csvsizeLig =countCsvLines(csvTest.get(i));
@@ -117,9 +117,9 @@ public class ExtractorTest
             numcol = colNumber(UrlWithTables);
             int wikisizeCol = numcol.get(i);
             assertTrue(wikisizeCol ==csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :" + wikisizeCol + "; reçu :" + csvsizeCol);
-            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,0,3)==getString(csvTest,3,0,3), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,0,0,0)==getString(csvTest,0,0,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
+            assertTrue(textCells(UrlWithTables,3,5,0)==getString(csvTest,3,5,0), "Contenu de la cellule du CSV différent du contenu de la cellule du site");
         }
     }
  
