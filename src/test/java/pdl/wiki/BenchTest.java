@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Test les URL du fichier wikiurls et les répartit en 2 fichiers
+ * Test les URL du fichier wikiurls et les rï¿½partit en 2 fichiers
  * en fonction des extracteurs (dans output, soit html soit wikitext)
  */
 public class BenchTest
@@ -35,7 +35,7 @@ public class BenchTest
         String outputDirHtml = "output" + File.separator + "html" + File.separator;
         assertTrue(new File(outputDirHtml).isDirectory());
         // directory where CSV files are exported (Wikitext extractor)
-        String outputDirWikitext = "output" + File.separator + "html" + File.separator;
+        String outputDirWikitext = "output" + File.separator + "wikitext" + File.separator;
         assertTrue(new File(outputDirWikitext).isDirectory());
 
         File file = new File("inputdata" + File.separator + "wikiurls.txt");
@@ -65,12 +65,12 @@ public class BenchTest
 
 
     }
-
+    
     /**
-     * Crée le fichier CSV à partir de l'url
+     * Crï¿½e le fichier CSV ï¿½ partir de l'url
      *
-     * @param String url qui est l'url du fichier que l'on veut créer
-     * @param int    n qui est le numéro du tableau de cette page
+     * @param String url qui est l'url du fichier que l'on veut crï¿½er
+     * @param int    n qui est le numï¿½ro du tableau de cette page
      * @return String le chemin du fichier CSV
      */
     private String mkCSVFileName(String url, int n)
@@ -81,8 +81,8 @@ public class BenchTest
     /**
      * Ecrit dans les fichiers html et wikitext le lien du fichier CSV
      *
-     * @param String             method qui définit si le fichier doit aller dans html ou wikitext
-     * @param String             url qui correspond à l'url de la page wikipédia
+     * @param String             method qui dï¿½finit si le fichier doit aller dans html ou wikitext
+     * @param String             url qui correspond ï¿½ l'url de la page wikipï¿½dia
      * @param List<List<String>> qui est la liste des liens CSV
      */
     private void writefile(String method, String url, List<List<String>> csvlist) throws IOException
