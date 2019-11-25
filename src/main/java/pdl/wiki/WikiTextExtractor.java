@@ -36,10 +36,10 @@ import java.util.regex.Pattern;
  */
 public class WikiTextExtractor implements Extractor {
 	private static final Pattern bracket = Pattern.compile("\\{{2}([^\\{}]*)}{2}");// récuperer les doubles brackets
-	private static final Pattern attribute = Pattern.compile("([^|]+)");// découpe les attributs dans les doubles brackets
-	private static final Pattern commentHTML = Pattern.compile("(<!--.*-->)"); //trouve les commentaires HTML
-	
-	
+	private static final Pattern attribute = Pattern.compile("([^|]+)");// découpe les attributs dans les doubles
+																		// brackets
+	private static final Pattern commentHTML = Pattern.compile("(<!--.*-->)"); // trouve les commentaires HTML
+
 	@Override
 	public List<List<String>> getCSV(Url purl) {
 		String wikitext = getWikitextFromApi(purl);
@@ -54,21 +54,18 @@ public class WikiTextExtractor implements Extractor {
 	private String getWikitextFromApi(Url pUrl) {
 		String wt = "";
 		try {
-			/*
-			 * URL apiUrl = new URL("https://" + pUrl.getLang() +
-			 * ".wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=" +
-			 * pUrl.getPageName());
-			 */
 			String url = "https://" + pUrl.getLang()
 					+ ".wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext";
+			
 			String oldId = pUrl.getOldId();
-
 			if (oldId != null && !oldId.isEmpty()) {
 				url += "&oldid=" + oldId;
 			} else {
 				url += "&page=" + pUrl.getPageName();
 			}
-
+			
+			url += "&redirects=";
+			
 			URL apiUrl = new URL(url);
 
 			HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -320,9 +317,7 @@ public class WikiTextExtractor implements Extractor {
 	private String processText(String s) {
 		String[] splitBracket = bracket.split(s);
 		StringBuilder sb;
-		// https://en.wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=Comparison_of_Android_e-book_reader_software
-		// problème de redirection en wikitext
-
+		
 		List<String> processValue = new ArrayList<String>();
 		Matcher matcher = bracket.matcher(s);
 
