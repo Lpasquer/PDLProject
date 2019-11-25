@@ -127,7 +127,7 @@ public class ExtractorTest {
 		assertTrue(tables.size() == 1, "L'url ( " + url.getLink() + " ) doit contenir une wikitable.");
 
 		Page page = new Page(url);
-		assertTrue(page.getTitleWithoutSpace().equals("IS_tank_family"), "Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
+		assertTrue(page.getTitleWithoutSpace().equals("ISTankFamily"), "Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
 	}
 
 	// retourne le nombre de lignes ou colonnes du fichier text CSV

@@ -15,12 +15,16 @@ public class Url {
 	private boolean valid;
 	private int tableCount;
 	private List<Element> listTables;
+	private String oldId;
+	private String pageName;
 
 	public Url(String link) {
 		this.link = link;
 		this.listTables = PageChecker.urlCheck(link);
 		this.tableCount = (listTables != null ? listTables.size() : -1);
 		this.valid = tableCount > -1;
+		findParameter();
+
 	}
 
 	/**
@@ -66,37 +70,61 @@ public class Url {
 		return lang.equals("www") ? "en" : lang;
 	}
 
+	/**
+	 * Retourne le titre de la page.
+	 * @return Titre de la page.
+	 */
 	public String getPageName() {
-		// TODO : revoir la répartition des infos avec Page afin d'eviter des methodes
-		// semblables (purifyTitle)
-		String[] tabUrl = link.split("/");
-		String path = tabUrl[tabUrl.length - 1];
-		if (path.contains("?")) {
-			path = path.split("\\?")[0];
+		if (pageName == null) {
+
+			String[] tabUrl = link.split("/");
+			String path = tabUrl[tabUrl.length - 1];
+			if (path.contains("?")) {
+				path = path.split("\\?")[0];
+			}
+			if (path.contains("#")) {
+				path = path.split("#")[0];
+			}
+			return path;
+		} else {
+			return pageName;
 		}
-		if (path.contains("#")) {
-			path = path.split("#")[0];
-		}
-		return path;
 	}
 	
 	/**
-	 * Retourne l'id de la révision.
-	 * @return L'id de la révision, null si aucun id.
+	 * Permet de trouver les paramètres oldid & title d'une url.
 	 */
-	public String getOldId() {
+	private void findParameter() {
 		Pattern pattern = Pattern.compile("(\\?|\\&)([^=]+)\\=([^&]+)");
 		Matcher matcher = pattern.matcher(link);
 
-		String value = null;
-
 		while (matcher.find()) {
-			if (matcher.group(2).equals("oldid")) {
-				value = matcher.group(3);
+			switch (matcher.group(2)) {
+			case "oldid":
+				oldId = matcher.group(3);
+				break;
+			case "title":
+				pageName = matcher.group(3);
+				break;
 			}
 		}
+	}
 
-		return value;
+	/**
+	 * Retourne l'id de la révision.
+	 * 
+	 * @return L'id de la révision, null si aucun id.
+	 */
+	public String getOldId() {
+		return oldId;
+	}
+	
+	/**
+	 * 
+	 * @return True si il y a un id de révision, sinon False.
+	 */
+	public boolean asOldId() {
+		return oldId != null;
 	}
 
 	@Override
