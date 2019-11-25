@@ -24,6 +24,7 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -61,10 +62,12 @@ public class WikiTextExtractor implements Extractor {
 			if (oldId != null && !oldId.isEmpty()) {
 				url += "&oldid=" + oldId;
 			} else {
-				url += "&page=" + pUrl.getPageName();
+				url += "&page=" + URLEncoder.encode(pUrl.getPageName(), "UTF-8");
 			}
 			
 			url += "&redirects=";
+			
+			
 			
 			URL apiUrl = new URL(url);
 
