@@ -8,6 +8,8 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import junit.framework.Assert;
+
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -117,67 +119,63 @@ public class ExtractorTest {
 		}
 	}
 
-	//retourne le nombre de lignes ou colonnes du fichier text CSV
-    private int countCsvLines(String csv) throws IOException
-    {
-        InputStream is = new ByteArrayInputStream(csv.getBytes());
-        try
-        {
-            byte[] c = new byte[1024];
-            int nbLig = 0;
-            int nbCharLu = 0;
-            boolean fichierVide = true;
-            while ((nbCharLu = is.read(c)) != -1)
-            {
-                fichierVide = false;
-                for (int i = 0; i < nbCharLu; ++i)
-                {
-                        if (c[i] == '\n')
-                        {
-                            nbLig++;
-                        }
-                    
-                }
-            }
-            return (nbLig == 0 && !fichierVide) ? 1 : nbLig;
-        }
-        finally
-        {
-            is.close();
-        }
-    }
-    
-    private int countCsvCol(String csv) throws IOException
-    {
-        InputStream is = new ByteArrayInputStream(csv.getBytes());
-        try
-        {
-            byte[] c = new byte[1024];
-            int nbCol = 1;
-            int nbCharLu = 0;
-            boolean fichierVide = true;
-            while ((nbCharLu = is.read(c)) != -1)
-            {
-                fichierVide = false;
-                for (int i = 0; i < nbCharLu; ++i)
-                {
-                    if (c[i] == ';')
-                        {
-                            nbCol++;
-                        }
-                    else if(c[i] == '\n') {
-                    	return nbCol;
-                    }
-                }
-                  
-            }
-            return (nbCol == 0 && !fichierVide) ? 1 : nbCol;
-        }
-        finally
-        {
-            is.close();
-        }
-    }
+	@Test
+	public void UrlWithOldIdWikitext() {
+		Url url = new Url("https://en.wikipedia.org/w/index.php?title=IS_tank_family&oldid=927279017");
+		List<List<String>> tables = extractorwiki.getCSV(url);
+
+		assertTrue(tables.size() == 1, "L'url ( " + url.getLink() + " ) doit contenir une wikitable.");
+
+		Page page = new Page(url);
+		assertTrue(page.getTitleWithoutSpace().equals("IS_tank_family"), "Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
+	}
+
+	// retourne le nombre de lignes ou colonnes du fichier text CSV
+	private int countCsvLines(String csv) throws IOException {
+		InputStream is = new ByteArrayInputStream(csv.getBytes());
+		try {
+			byte[] c = new byte[1024];
+			int nbLig = 0;
+			int nbCharLu = 0;
+			boolean fichierVide = true;
+			while ((nbCharLu = is.read(c)) != -1) {
+				fichierVide = false;
+				for (int i = 0; i < nbCharLu; ++i) {
+					if (c[i] == '\n') {
+						nbLig++;
+					}
+
+				}
+			}
+			return (nbLig == 0 && !fichierVide) ? 1 : nbLig;
+		} finally {
+			is.close();
+		}
+	}
+
+	private int countCsvCol(String csv) throws IOException {
+		InputStream is = new ByteArrayInputStream(csv.getBytes());
+		try {
+			byte[] c = new byte[1024];
+			int nbCol = 1;
+			int nbCharLu = 0;
+			boolean fichierVide = true;
+			while ((nbCharLu = is.read(c)) != -1) {
+				fichierVide = false;
+				for (int i = 0; i < nbCharLu; ++i) {
+					if (c[i] == ';') {
+						nbCol++;
+					} else if (c[i] == '\n') {
+						return nbCol;
+					}
+				}
+
+			}
+			return (nbCol == 0 && !fichierVide) ? 1 : nbCol;
+		} finally {
+			is.close();
+		}
+	}
 
 	Map<Integer, Integer> numcol;
 	private String[][] tab;
