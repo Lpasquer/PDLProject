@@ -129,7 +129,15 @@ public class ExtractorTest {
 		Page page = new Page(url);
 		assertTrue(page.getTitleWithoutSpace().equals("ISTankFamily"), "Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
 	}
+	
+	@Test
+	public void UrlRedirectWikitext() {
+		Url url = new Url("https://en.wikipedia.org/wiki/Comparison_of_Android_e-book_reader_software");
+		List<List<String>> tables = extractorwiki.getCSV(url);
 
+		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) contient au moins une wikitable.");
+	}
+	
 	// retourne le nombre de lignes ou colonnes du fichier text CSV
 	private int countCsvLines(String csv) throws IOException {
 		InputStream is = new ByteArrayInputStream(csv.getBytes());
