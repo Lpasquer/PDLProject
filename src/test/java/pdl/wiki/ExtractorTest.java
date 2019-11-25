@@ -135,7 +135,15 @@ public class ExtractorTest {
 		Url url = new Url("https://en.wikipedia.org/wiki/Comparison_of_Android_e-book_reader_software");
 		List<List<String>> tables = extractorwiki.getCSV(url);
 
-		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) contient au moins une wikitable.");
+		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) doit contenir au moins une wikitable.");
+	}
+	
+	@Test
+	public void UrlWithSpecialCharacterWikitext() {
+		Url url = new Url("https://en.wikipedia.org/wiki/Comparison_of_ALGOL_68_and_C++");
+		List<List<String>> tables = extractorwiki.getCSV(url);
+		
+		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) doit contenir au moins une wikitable.");
 	}
 	
 	// retourne le nombre de lignes ou colonnes du fichier text CSV
