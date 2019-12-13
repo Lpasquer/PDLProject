@@ -5,6 +5,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Classe permettant la conversion de tables d'une page HTML en format CSV
@@ -38,14 +40,14 @@ public class HTMLExtractor implements Extractor
             int i = 0;
             for (Element line : ligne)
             {	
-            	Elements col = e.select("td, th");
+            	Elements col = line.select("td, th");
             	int j=0;
                 for (Element cellule : col) {
-                	int rowspan = 0;
+                	int rowspan = 1;
                 	if(!cellule.attr("rowspan").isEmpty()) {
                 		rowspan = Integer.parseInt(cellule.attr("rowspan"));
                 	} 
-                	int colspan = 0;
+                	int colspan = 1;
                 	if(!cellule.attr("colspan").isEmpty()) {
                 		colspan = Integer.parseInt(cellule.attr("colspan"));
                 	}
@@ -56,7 +58,6 @@ public class HTMLExtractor implements Extractor
                 i++;
             }
             listeDeList.add(table.getCSVLines());
-
         }
         return listeDeList;
     }
