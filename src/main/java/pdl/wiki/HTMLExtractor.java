@@ -45,11 +45,13 @@ public class HTMLExtractor implements Extractor
                 for (Element cellule : col) {
                 	int rowspan = 1;
                 	if(!cellule.attr("rowspan").isEmpty()) {
-                		rowspan = Integer.parseInt(cellule.attr("rowspan"));
+                		String rowspantxt =cellule.attr("rowspan");
+                		rowspan = Integer.parseInt(rowspantxt.replaceAll("\"", ""));
                 	} 
                 	int colspan = 1;
                 	if(!cellule.attr("colspan").isEmpty()) {
-                		colspan = Integer.parseInt(cellule.attr("colspan"));
+                		String colspantxt = cellule.attr("colspan");
+                		colspan = Integer.parseInt(colspantxt.replaceAll("\"", ""));
                 	}
                 	String value = cellule.text();
                 	table.addValue(i, j, rowspan, colspan, value);
