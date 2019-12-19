@@ -5,6 +5,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Classe permettant la conversion de tables d'une page HTML en format CSV
@@ -22,11 +24,11 @@ public class HTMLExtractor implements Extractor
     public List<List<String>> getCSV(Url purl)
     {
 
-        StringBuilder ligne;
         List<List<String>> listeDeList = new ArrayList<>();
         List<Element> listTables = purl.getListTables();
         for (Element e : listTables)
         {
+        	Table table = new Table();
             List<String> csvData = new ArrayList<>();
 
 //            csvData.add(getTableHeader(e));
@@ -34,24 +36,30 @@ public class HTMLExtractor implements Extractor
             e.getElementsByTag("sup").remove();
             e.getElementsByTag("sub").remove();
 
-            Elements elements1 = e.select("tr");
-            for (Element anElements1 : elements1)
-            {
-                ligne = new StringBuilder();
-//                Elements rowItems = anElements1.select("td");
-                Elements rowItems = anElements1.children();
-                for (int j = 0; j < rowItems.size(); j++)
-                {
-                    String cellContent = rowItems.get(j).text().replaceAll(";", ",");
-                    ligne.append(cellContent);
-                    if (j != rowItems.size() - 1)
-                    {
-                        ligne.append(";");
-                    }
+            Elements ligne = e.select("tr");
+            int i = 0;
+            for (Element line : ligne)
+            {	
+            	Elements col = line.select("td, th");
+            	int j=0;
+                for (Element cellule : col) {
+                	int rowspan = 1;
+                	if(!cellule.attr("rowspan").isEmpty()) {
+                		String rowspantxt =cellule.attr("rowspan");
+                		rowspan = Integer.parseInt(rowspantxt.replaceAll("\"", ""));
+                	} 
+                	int colspan = 1;
+                	if(!cellule.attr("colspan").isEmpty()) {
+                		String colspantxt = cellule.attr("colspan");
+                		colspan = Integer.parseInt(colspantxt.replaceAll("\"", ""));
+                	}
+                	String value = cellule.text();
+                	table.addValue(i, j, rowspan, colspan, value);
+                	j++;
                 }
-                csvData.add(ligne.toString());
+                i++;
             }
-            listeDeList.add(csvData);
+            listeDeList.add(table.getCSVLines());
         }
         return listeDeList;
     }
