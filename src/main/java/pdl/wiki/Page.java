@@ -109,30 +109,9 @@ public class Page
      */
     private String purifyTitle()
     {
-        String[] tabUrl = new String[0];
-        String purifiedTitle = "";
-        try
-        {
-            // Décodage de l'url pour obtenir la version unicode
-            tabUrl = URLDecoder.decode(url.getLink(), "UTF-8").split("/");
-            // Remplacement des underscore par des espaces
-            purifiedTitle = tabUrl[tabUrl.length - 1].replaceAll("_", " ");
-            // Suppresion des paramètres si présents
-            if (purifiedTitle.contains("?"))
-            {
-                purifiedTitle = purifiedTitle.split("\\?")[0];
-            }
-            // Si aucun paramètre n'existait on supprime le potentiel lien interne
-            if (purifiedTitle.contains("#"))
-            {
-                purifiedTitle = purifiedTitle.split("#")[0];
-            }
-        }
-        catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return purifiedTitle;
+    	String pageName = url.getPageName();
+    	
+        return pageName.replaceAll("_", " ");
     }
 
 }

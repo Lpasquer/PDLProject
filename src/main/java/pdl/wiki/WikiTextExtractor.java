@@ -15,6 +15,7 @@ import org.sweble.wikitext.parser.nodes.WtTableRow;
 import org.sweble.wikitext.parser.nodes.WtText;
 import org.sweble.wikitext.parser.nodes.WtXmlAttribute;
 import org.sweble.wikitext.parser.nodes.WtXmlAttributes;
+import org.sweble.wikitext.parser.nodes.WtXmlElement;
 import org.sweble.wikitext.parser.utils.SimpleParserConfig;
 import xtc.parser.ParseException;
 
@@ -23,8 +24,8 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -35,6 +36,10 @@ import java.util.regex.Pattern;
  * @return la liste des tableaux CSV créés
  */
 public class WikiTextExtractor implements Extractor {
+	private static final Pattern bracket = Pattern.compile("\\{{2}([^\\{}]*)}{2}");// récuperer les doubles brackets
+	private static final Pattern attribute = Pattern.compile("([^|]+)");// découpe les attributs dans les doubles
+																		// brackets
+	private static final Pattern commentHTML = Pattern.compile("(<!--.*-->)"); // trouve les commentaires HTML
 
 	@Override
 	public List<List<String>> getCSV(Url purl) {
@@ -50,21 +55,20 @@ public class WikiTextExtractor implements Extractor {
 	private String getWikitextFromApi(Url pUrl) {
 		String wt = "";
 		try {
-			/*
-			 * URL apiUrl = new URL("https://" + pUrl.getLang() +
-			 * ".wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext&page=" +
-			 * pUrl.getPageName());
-			 */
 			String url = "https://" + pUrl.getLang()
 					+ ".wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext";
+			
 			String oldId = pUrl.getOldId();
-
 			if (oldId != null && !oldId.isEmpty()) {
 				url += "&oldid=" + oldId;
 			} else {
-				url += "&page=" + pUrl.getPageName();
+				url += "&page=" + URLEncoder.encode(pUrl.getPageName(), "UTF-8");
 			}
-
+			
+			url += "&redirects=";
+			
+			
+			
 			URL apiUrl = new URL(url);
 
 			HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -178,9 +182,9 @@ public class WikiTextExtractor implements Extractor {
 				impl = (WtTableImplicitTableBody) node;
 		}
 
-		if(impl == null)
+		if (impl == null)
 			return null;
-		
+
 		for (WtNode current : impl.getBody()) {
 
 			switch (current.getNodeType()) {
@@ -228,6 +232,11 @@ public class WikiTextExtractor implements Extractor {
 			case WtNode.NT_PARAGRAPH:
 				sb.append(content(current));
 				break;
+			case WtNode.NT_XML_ELEMENT:
+				sb.append(content(((WtXmlElement) current).getBody()));
+				break;
+			case WtNode.NT_URL:
+				return new String();
 			case WtNode.NT_INTERNAL_LINK:
 				sb.append(wtInternalLink((WtInternalLink) current));
 				break;
@@ -264,7 +273,7 @@ public class WikiTextExtractor implements Extractor {
 		default:
 			return null;
 		}
-
+		boolean asOtherAttribute = false;
 		for (WtNode wtNode : wtXmlAttributes) {
 			if (wtNode.getNodeType() == WtNode.NT_XML_ATTRIBUTE) {
 				WtXmlAttribute attribute = (WtXmlAttribute) wtNode;
@@ -283,13 +292,19 @@ public class WikiTextExtractor implements Extractor {
 						}
 					}
 				} else {
-					if (!attribute.hasValue())
+					if (!attribute.hasValue()) {
+						asOtherAttribute = true;
 						sb.append(name);
+					}
 				}
 			} else if (wtNode.getNodeType() == WtNode.NT_XML_ATTRIBUTE_GARBAGE) {
+				asOtherAttribute = true;
 				sb.append(content(wtNode));
 			}
 		}
+
+		if (asOtherAttribute)
+			sb.append('|');
 
 		WtBody wtBody = null;
 		if (elem.getNodeType() == WtNode.NT_TABLE_CELL)
@@ -303,36 +318,64 @@ public class WikiTextExtractor implements Extractor {
 	}
 
 	private String processText(String s) {
-		// Pattern pattern = Pattern.compile("\\{{2}[\\S]+\\}{2}");
-		Pattern pattern = Pattern.compile("\\{{2}.+\\}{2}");
-		String[] value = pattern.split(s);
-
+		String[] splitBracket = bracket.split(s);
+		StringBuilder sb;
+		
 		List<String> processValue = new ArrayList<String>();
-		Matcher matcher = pattern.matcher(s);
+		Matcher matcher = bracket.matcher(s);
 
 		while (matcher.find()) {
-			String val = matcher.group();
+			String param = matcher.group(1);
 
-			val = val.substring(2, val.length() - 2);
-			val = val.replace("unité", "");
-			val = val.replace("|", "");
-			processValue.add(val);
-		}
+			Matcher match = attribute.matcher(param);
 
-		StringBuilder sb = new StringBuilder();
-		for (int i = 0; i < value.length; i++) {
-			sb.append(value[i]);
-			if (i != value.length - 1) {
-				sb.append(processValue.get(i));
+			if (match.find()) {
+
+				String param1 = match.group(1);
+
+				switch (param1) {
+				case "citation needed":
+				case "ref":
+					break;
+				default:
+					String last = null;
+					while (match.find())
+						last = match.group(1);
+					if (last == null)
+						processValue.add(param1);
+					else
+						processValue.add(last);
+				}
 			}
 		}
 
-		Pattern pattern2 = Pattern.compile("\\d+px");
-		String[] valueSplit2 = pattern2.split(s);
-		String val = Arrays.toString(valueSplit2);
+		sb = new StringBuilder();
 
-		return s.replace(';', ',').replace("\n", "");
-		// return sb.toString().replace(';', ',').replace("\n", "");
+		if (splitBracket.length == 0) {
+			for (String val : processValue)
+				sb.append(val);
+		} else {
+
+			for (int i = 0; i < splitBracket.length; i++) {
+				sb.append(splitBracket[i]);
+				if (i < processValue.size()) {
+					sb.append(processValue.get(i));
+				}
+			}
+		}
+
+		String finalValue = sb.toString();
+		if (bracket.matcher(finalValue).find())
+			finalValue = processText(sb.toString());
+
+		sb = new StringBuilder();
+		String[] splitCommentHTML = commentHTML.split(finalValue);
+		for (int i = 0; i < splitCommentHTML.length; i++)
+			sb.append(splitCommentHTML[i]);
+
+		finalValue = sb.toString();
+
+		return finalValue.replace(';', ',').replace("\n", " ");
 	}
 
 	private String wtInternalLink(WtInternalLink elem) {
