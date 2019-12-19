@@ -5,8 +5,6 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Classe permettant la conversion de tables d'une page HTML en format CSV
@@ -29,9 +27,6 @@ public class HTMLExtractor implements Extractor
         for (Element e : listTables)
         {
         	Table table = new Table();
-            List<String> csvData = new ArrayList<>();
-
-//            csvData.add(getTableHeader(e));
             // Suppression des tags <sup> et <sub>, étant trop souvent des liens
             e.getElementsByTag("sup").remove();
             e.getElementsByTag("sub").remove();
@@ -53,7 +48,7 @@ public class HTMLExtractor implements Extractor
                 		String colspantxt = cellule.attr("colspan");
                 		colspan = Integer.parseInt(colspantxt.replaceAll("\"", ""));
                 	}
-                	String value = cellule.text();
+                	String value = cellule.text().replace(';', ',').replace("\n", " ");
                 	table.addValue(i, j, rowspan, colspan, value);
                 	j++;
                 }
@@ -63,16 +58,4 @@ public class HTMLExtractor implements Extractor
         }
         return listeDeList;
     }
-
-    private String getTableHeader(Element e)
-    {
-        String csvHeader = "";
-        Elements header = e.select("thead tr td");
-        for (Element colHeader : header)
-        {
-            csvHeader += colHeader.text();
-        }
-        return csvHeader;
-    }
-
 }

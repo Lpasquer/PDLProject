@@ -1,6 +1,5 @@
 package pdl.wiki;
 
-import org.apache.commons.io.FileUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -8,12 +7,10 @@ import org.jsoup.select.Elements;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import junit.framework.Assert;
-
-import java.io.ByteArrayInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,9 +28,7 @@ public class ExtractorTest {
 	Extractor extractorhtml;
 	String UrlWithTables;
 	Map<String, Integer> nbtabliens;
-	List<List<String>> csvwiki;
-	List<List<String>> csvhtml;
-	List<String> csvTest;
+	List<List<String>> csvTest;
 
 	@BeforeEach
 	public void setUp() throws Exception {
@@ -41,81 +36,62 @@ public class ExtractorTest {
 		extractorwiki = new WikiTextExtractor();
 		UrlWithTables = "https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522";
 		nbtabliens = new HashMap<>();
-		nbtabliens.put("https://fr.wikipedia.org/w/index.php?title=Th%C3%BCringer_HC&oldid=161132172", 1);
-		nbtabliens.put(
-				"https://fr.wikipedia.org/w/index.php?title=Championnat_d%27Allemagne_f%C3%A9minin_de_handball&oldid=160723522",
-				6);
-		nbtabliens.put(
-				"https://fr.wikipedia.org/w/index.php?title=Parti_communiste_de_l%27Union_sovi%C3%A9tique&oldid=160293234",
-				3);
-		nbtabliens.put(
-				"https://fr.wikipedia.org/w/index.php?title=Union_des_r%C3%A9publiques_socialistes_sovi%C3%A9tiques&oldid=163482866",
+
+		nbtabliens.put("https://en.wikipedia.org/w/index.php?title=Handball-Bundesliga_(women)&oldid=898595565", 5);
+		nbtabliens.put("https://en.wikipedia.org/w/index.php?title=Communist_Party_of_the_Soviet_Union&oldid=931312112",
 				2);
-		csvTest = new ArrayList<>();
+		nbtabliens.put("https://en.wikipedia.org/w/index.php?title=Soviet_Union&oldid=931330041", 1);
+		nbtabliens.put("https://en.wikipedia.org/w/index.php?title=IS_tank_family&oldid=927279017", 1);
+
+		csvTest = new ArrayList<List<String>>();
 		for (int i = 1; i < 7; i++) {
-			csvTest.add(FileUtils.readFileToString(new File("inputdata" + File.separator + "PDL" + i + ".csv")));
+			csvTest.add(readFile("inputdata" + File.separator + "PDL" + i + ".csv"));
 		}
 	}
 
 	@Test
-	public void getCSVHTML() {
+	public void getCSVHTML1() {
+		compareNumberOfTable(extractorhtml);
+	}
+	
+	@Test
+	public void getCSVWikiText1() {
+		compareNumberOfTable(extractorwiki);
+	}
+	
+	private void compareNumberOfTable(Extractor extractor) {
 		for (Entry<String, Integer> entry : nbtabliens.entrySet()) {
-			int htmlSize = extractorhtml.getCSV(new Url(entry.getKey())).size();
-			assertTrue(entry.getValue() == htmlSize, "nombre de tableau trouvé incorrecte (extractor HTML, lien:"
-					+ entry.getKey() + "; prévu : )" + entry.getValue() + ", reçu : " + htmlSize);
+			int size = extractor.getCSV(new Url(entry.getKey())).size();
+			assertTrue(entry.getValue() == size, "nombre de tableau trouvé incorrecte (lien:" + entry.getKey()
+					+ "; prévu : )" + entry.getValue() + ", reçu : " + size);
 		}
 	}
 
 	@Test
-	public void getCSVWikiText() {
-		for (Entry<String, Integer> entry : nbtabliens.entrySet()) {
-			int wikitextSize = extractorwiki.getCSV(new Url(entry.getKey())).size();
-			assertTrue(entry.getValue() == wikitextSize, "nombre de tableau trouvé incorrecte (extractor wiki, lien:"
-					+ entry.getKey() + "; prévu : )" + entry.getValue() + ", reçu : " + wikitextSize);
-		}
+	public void getCSVWikiText2() {
+		compareColLine(extractorwiki.getCSV(new Url(UrlWithTables)));
 	}
 
 	@Test
-	public void getCSV2HTML() throws IOException {
-		csvhtml = extractorhtml.getCSV(new Url(UrlWithTables));
+	public void getCSVHTML2() {
+		compareColLine(extractorhtml.getCSV(new Url(UrlWithTables)));
+	}
+
+	private void compareColLine(List<List<String>> csv) {
 		for (int i = 0; i < 6; i++) {
-			int htmlsizeLig = csvhtml.get(i).size();
-			int csvsizeLig = countCsvLines(csvTest.get(i));
-			assertTrue(htmlsizeLig == csvsizeLig,
-					"Nombre de lignes du CSV différent trouvé (HTML), prévu :" + htmlsizeLig + "; reçu :" + csvsizeLig);
-			int csvsizeCol = countCsvCol(csvTest.get(i));
-			numcol = colNumber(UrlWithTables);
-			int htmlsizeCol = numcol.get(i);
-			assertTrue(htmlsizeCol == csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :"
-					+ htmlsizeCol + "; reçu :" + csvsizeCol);
-			assertTrue(textCells(UrlWithTables, 3, 0, 3) == getString(csvTest, 3, 0, 3),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-			assertTrue(textCells(UrlWithTables, 0, 0, 0) == getString(csvTest, 0, 0, 0),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-			assertTrue(textCells(UrlWithTables, 3, 5, 0) == getString(csvTest, 3, 5, 0),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-		}
-	}
+			List<String> file = csvTest.get(i);
+			int extractNunberOfLine = csv.get(i).size();
+			int fileNunberOfLine = file.size();
+			assertTrue(fileNunberOfLine == extractNunberOfLine, "Nombre de lignes du CSV différent trouvé, prévu :"
+					+ fileNunberOfLine + "; reçu :" + extractNunberOfLine + " CSV : " + (i + 1));
 
-	@Test
-	public void getCSV2WikiText() throws IOException {
-		csvwiki = extractorwiki.getCSV(new Url(UrlWithTables));
-		for (int i = 0; i < 6; i++) {
-			int wikisizeLig = csvwiki.get(i).size();
-			int csvsizeLig = countCsvLines(csvTest.get(i));
-			assertTrue(wikisizeLig == csvsizeLig,
-					"Nombre de lignes du CSV différent trouvé (Wiki), prévu :" + wikisizeLig + "; reçu :" + csvsizeLig);
-			int csvsizeCol = countCsvCol(csvTest.get(i));
-			numcol = colNumber(UrlWithTables);
-			int wikisizeCol = numcol.get(i);
-			assertTrue(wikisizeCol == csvsizeCol, "Nombre de colonnes du CSV différent trouvé (HTML), prévu :"
-					+ wikisizeCol + "; reçu :" + csvsizeCol);
-			assertTrue(textCells(UrlWithTables, 3, 0, 3) == getString(csvTest, 3, 0, 3),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-			assertTrue(textCells(UrlWithTables, 0, 0, 0) == getString(csvTest, 0, 0, 0),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
-			assertTrue(textCells(UrlWithTables, 3, 5, 0) == getString(csvTest, 3, 5, 0),
-					"Contenu de la cellule du CSV difféent du contenue de la cellule du site");
+			for (int line = 0; line < file.size(); line++) {
+				int extractNunberOfCol = countCol(csv.get(i).get(line));
+				int fileNunberOfCol = countCol(file.get(line));
+				assertTrue(fileNunberOfCol == extractNunberOfCol,
+						"Nombre de colonnes du CSV différent trouvé, prévu :" + fileNunberOfCol + "; reçu :"
+								+ extractNunberOfCol + " CSV : " + (i + 1) + " ligne : " + (line + 1));
+			}
 		}
 	}
 
@@ -127,9 +103,10 @@ public class ExtractorTest {
 		assertTrue(tables.size() == 1, "L'url ( " + url.getLink() + " ) doit contenir une wikitable.");
 
 		Page page = new Page(url);
-		assertTrue(page.getTitleWithoutSpace().equals("ISTankFamily"), "Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
+		assertTrue(page.getTitleWithoutSpace().equals("ISTankFamily"),
+				"Nom de page invalide. Prévu : IS_tank_family - Reçu : " + page.getTitleWithoutSpace());
 	}
-	
+
 	@Test
 	public void UrlRedirectWikitext() {
 		Url url = new Url("https://en.wikipedia.org/wiki/Comparison_of_Android_e-book_reader_software");
@@ -137,160 +114,31 @@ public class ExtractorTest {
 
 		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) doit contenir au moins une wikitable.");
 	}
-	
+
 	@Test
 	public void UrlWithSpecialCharacterWikitext() {
 		Url url = new Url("https://en.wikipedia.org/wiki/Comparison_of_ALGOL_68_and_C++");
 		List<List<String>> tables = extractorwiki.getCSV(url);
-		
+
 		assertTrue(tables.size() != 0, "L'url ( " + url.getLink() + " ) doit contenir au moins une wikitable.");
 	}
-	
-	// retourne le nombre de lignes ou colonnes du fichier text CSV
-	private int countCsvLines(String csv) throws IOException {
-		InputStream is = new ByteArrayInputStream(csv.getBytes());
+
+	private List<String> readFile(String filename) {
+		List<String> records = new ArrayList<String>();
 		try {
-			byte[] c = new byte[1024];
-			int nbLig = 0;
-			int nbCharLu = 0;
-			boolean fichierVide = true;
-			while ((nbCharLu = is.read(c)) != -1) {
-				fichierVide = false;
-				for (int i = 0; i < nbCharLu; ++i) {
-					if (c[i] == '\n') {
-						nbLig++;
-					}
-
-				}
+			BufferedReader reader = new BufferedReader(new FileReader(filename));
+			String line;
+			while ((line = reader.readLine()) != null) {
+				records.add(line);
 			}
-			return (nbLig == 0 && !fichierVide) ? 1 : nbLig;
-		} finally {
-			is.close();
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
+		return records;
 	}
 
-	private int countCsvCol(String csv) throws IOException {
-		InputStream is = new ByteArrayInputStream(csv.getBytes());
-		try {
-			byte[] c = new byte[1024];
-			int nbCol = 1;
-			int nbCharLu = 0;
-			boolean fichierVide = true;
-			while ((nbCharLu = is.read(c)) != -1) {
-				fichierVide = false;
-				for (int i = 0; i < nbCharLu; ++i) {
-					if (c[i] == ';') {
-						nbCol++;
-					} else if (c[i] == '\n') {
-						return nbCol;
-					}
-				}
-
-			}
-			return (nbCol == 0 && !fichierVide) ? 1 : nbCol;
-		} finally {
-			is.close();
-		}
+	private int countCol(String text) {
+		return text.split(";").length;
 	}
-
-	Map<Integer, Integer> numcol;
-	private String[][] tab;
-
-	public Map<Integer, Integer> colNumber(String url) throws IOException {
-		Document page = Jsoup.connect(url).get();
-		Elements tables = page.select(".wikitable");
-		numcol = new HashMap<Integer, Integer>();
-		int i = 0;
-
-		for (Element table : tables) {
-			int tot = 0;
-			for (Element colspan : table.select("td")) {
-				String valcol = colspan.attr("colspan");
-				if (valcol != "")
-					tot += Integer.parseInt(valcol) - 1;
-				String valrow = colspan.attr("rowspan");
-				if (valrow != "")
-					tot += Integer.parseInt(valrow) - 1;
-			}
-			for (Element thcolspan : table.select("th")) {
-				String valcol = thcolspan.attr("colspan");
-				if (valcol != "")
-					tot += Integer.parseInt(valcol) - 1;
-				String valrow = thcolspan.attr("rowspan");
-				if (valrow != "")
-					tot += Integer.parseInt(valrow) - 1;
-			}
-			int nbcol = (table.select("td").size() + table.select("th").size() + tot) / table.select("tr").size();
-			numcol.put(i, nbcol);
-			// System.out.println(nbcol);
-			i++;
-		}
-		return numcol;
-	}
-
-	public String textCells(String url, int tableau, int lignes, int cols) throws IOException {
-		Document page = Jsoup.connect(url).get();
-		Elements tables = page.select(".wikitable");
-		int i = 0;
-
-		for (Element table : tables) {
-			if (i == tableau) {
-				int j = 0;
-				tab = new String[30][30];
-				for (Element ligne : table.select("tr")) {
-					int c = 0;
-					for (Element cellule : ligne.select("td, th")) {
-						if (cellule.attr("rowspan") != "") {
-							String rowValue = cellule.text();
-							int cellsRows = Integer.parseInt(cellule.attr("rowspan")) + j;
-							for (int lig = j; lig < cellsRows; lig++) {
-								tab[lig][c] = rowValue;
-							}
-						} else if (cellule.attr("colspan") != "") {
-							String colValue = cellule.text();
-							int cellsCols = Integer.parseInt(cellule.attr("colspan")) + c;
-							for (int col = c; col < cellsCols; col++) {
-								tab[j][col] = colValue;
-							}
-						} else {
-							while (tab[j][c] != null) {
-								c++;
-							}
-							String cellValue = cellule.text();
-							tab[j][c] = cellValue;
-						}
-						c++;
-					}
-					j++;
-				}
-				return tab[lignes][cols];
-			}
-			i++;
-		}
-		return "Rien";
-	}
-
-	public String getString(List<String> csvTest, int tb, int lignes, int cols) throws IOException {
-		String csv = csvTest.get(tb);
-		InputStream is = new ByteArrayInputStream(csv.getBytes());
-		try {
-			byte[] c = new byte[1024];
-			int nbCol = 1;
-			int nbCharLu = 0;
-			boolean fichierVide = true;
-			while ((nbCharLu = is.read(c)) != -1) {
-				fichierVide = false;
-				String res = new String(c);
-				String tablig[] = res.split("/n");
-				String strglig = tablig[lignes];
-				String tabcol[] = strglig.split(";");
-				String strgcol = tabcol[cols];
-				return strgcol;
-			}
-			return "Rien";
-		} finally {
-			is.close();
-		}
-	}
-
 }

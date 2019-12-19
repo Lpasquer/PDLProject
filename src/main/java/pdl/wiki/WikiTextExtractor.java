@@ -67,8 +67,6 @@ public class WikiTextExtractor implements Extractor {
 			
 			url += "&redirects=";
 			
-			
-			
 			URL apiUrl = new URL(url);
 
 			HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -141,7 +139,7 @@ public class WikiTextExtractor implements Extractor {
 			}
 		}
 	}
-
+	
 	private List<List<String>> getCSV(String wikitext) {
 
 		WikitextParser parser = new WikitextParser(new SimpleParserConfig());
@@ -389,7 +387,6 @@ public class WikiTextExtractor implements Extractor {
 	}
 
 	private String wtText(WtText elem) {
-
 		return elem.getContent();
 	}
 }
