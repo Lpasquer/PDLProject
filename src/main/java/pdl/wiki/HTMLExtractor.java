@@ -48,7 +48,7 @@ public class HTMLExtractor implements Extractor
                 		String colspantxt = cellule.attr("colspan");
                 		colspan = Integer.parseInt(colspantxt.replaceAll("\"", ""));
                 	}
-                	String value = cellule.text().replace(';', ',').replace("<br>", " ");
+                	String value = cellule.text().replace(';', ',').replace("<br>", " ").replace("\n", " ");
                 	table.addValue(i, j, rowspan, colspan, value);
                 	j++;
                 }
