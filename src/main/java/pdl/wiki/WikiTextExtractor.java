@@ -333,7 +333,9 @@ public class WikiTextExtractor implements Extractor {
 
 				switch (param1) {
 				case "citation needed":
+				case "Citation needed":
 				case "ref":
+				case "refn":
 					break;
 				case "date":
 					if(match.find())
