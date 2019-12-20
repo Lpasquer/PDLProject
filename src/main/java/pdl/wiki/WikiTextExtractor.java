@@ -335,6 +335,10 @@ public class WikiTextExtractor implements Extractor {
 				case "citation needed":
 				case "ref":
 					break;
+				case "date":
+					if(match.find())
+						processValue.add(match.group(1));
+					break;
 				default:
 					String last = null;
 					while (match.find())
