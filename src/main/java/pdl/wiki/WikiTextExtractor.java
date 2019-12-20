@@ -349,6 +349,10 @@ public class WikiTextExtractor implements Extractor {
 				case "ref":
 				case "refn":
 					break;
+				case "cvt":
+					while (match.find())
+						processValue.add(match.group(1));
+					break;
 				case "Free":
 					if (match.find())
 						processValue.add(match.group(1));
