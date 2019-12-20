@@ -59,16 +59,16 @@ public class WikiTextExtractor implements Extractor {
 		try {
 			String url = "https://" + pUrl.getLang()
 					+ ".wikipedia.org/w/api.php?action=parse&format=json&prop=wikitext";
-			
+
 			String oldId = pUrl.getOldId();
 			if (oldId != null && !oldId.isEmpty()) {
 				url += "&oldid=" + oldId;
 			} else {
 				url += "&page=" + URLEncoder.encode(pUrl.getPageName(), "UTF-8");
 			}
-			
+
 			url += "&redirects=";
-			
+
 			URL apiUrl = new URL(url);
 
 			HttpURLConnection connection = (HttpURLConnection) apiUrl.openConnection();
@@ -141,7 +141,7 @@ public class WikiTextExtractor implements Extractor {
 			}
 		}
 	}
-	
+
 	private List<List<String>> getCSV(String wikitext) {
 
 		WikitextParser parser = new WikitextParser(new SimpleParserConfig());
@@ -325,7 +325,7 @@ public class WikiTextExtractor implements Extractor {
 	private String processText(String s) {
 		String[] splitBracket = bracket.split(s);
 		StringBuilder sb;
-		
+
 		List<String> processValue = new ArrayList<String>();
 		Matcher matcher = bracket.matcher(s);
 
@@ -342,15 +342,21 @@ public class WikiTextExtractor implements Extractor {
 				case "citation needed":
 				case "Citation needed":
 				case "cite web":
-				case "cite web ":	
+				case "cite web ":
 				case "Cite web":
 				case "Cite web ":
 				case "Dead link":
 				case "ref":
 				case "refn":
 					break;
+				case "Free":
+					if (match.find())
+						processValue.add(match.group(1));
+					else
+						processValue.add(param1);
+					break;
 				case "date":
-					if(match.find())
+					if (match.find())
 						processValue.add(match.group(1));
 					break;
 				default:
