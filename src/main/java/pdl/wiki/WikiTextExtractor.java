@@ -344,6 +344,7 @@ public class WikiTextExtractor implements Extractor {
 				case "cite web":
 				case "Cite web":
 				case "Cite web ":
+				case "Dead link":
 				case "ref":
 				case "refn":
 					break;
