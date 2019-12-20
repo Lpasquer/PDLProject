@@ -1,0 +1,39 @@
+package pdl.wiki;
+
+public class Cell {
+	private int rowspan;
+	private int colspan;
+	private String value;
+
+	public Cell(int rowspan, int colspan, String value) {
+		this.rowspan = rowspan;
+		this.colspan = colspan;
+		this.value = value;
+	}
+
+	public int getRowspan() {
+		return rowspan;
+	}
+
+	public void setRowspan(int rowspan) {
+		this.rowspan = rowspan;
+	}
+
+	public int getColspan() {
+		return colspan;
+	}
+
+	public void setColspan(int colspan) {
+		this.colspan = colspan;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+	
+	
+}
