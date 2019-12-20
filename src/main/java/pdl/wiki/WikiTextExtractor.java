@@ -341,6 +341,9 @@ public class WikiTextExtractor implements Extractor {
 				switch (param1) {
 				case "citation needed":
 				case "Citation needed":
+				case "cite web":
+				case "Cite web":
+				case "Cite web ":
 				case "ref":
 				case "refn":
 					break;
