@@ -5,6 +5,7 @@ import org.json.JSONObject;
 import org.sweble.wikitext.parser.WikitextParser;
 import org.sweble.wikitext.parser.WikitextPostprocessor;
 import org.sweble.wikitext.parser.nodes.WtBody;
+import org.sweble.wikitext.parser.nodes.WtExternalLink;
 import org.sweble.wikitext.parser.nodes.WtInternalLink;
 import org.sweble.wikitext.parser.nodes.WtListItem;
 import org.sweble.wikitext.parser.nodes.WtNode;
@@ -253,6 +254,9 @@ public class WikiTextExtractor implements Extractor {
 			case WtNode.NT_LIST_ITEM:
 				sb.append(content(current));
 				break;
+			case WtNode.NT_EXTERNAL_LINK:
+				sb.append(wtExternalLink((WtExternalLink) current));
+				break;
 			case WtNode.NT_URL:
 			default:
 				break;
@@ -346,6 +350,7 @@ public class WikiTextExtractor implements Extractor {
 				case "Cite web":
 				case "Cite web ":
 				case "Dead link":
+				case "webarchive":
 				case "ref":
 				case "refn":
 					break;
@@ -411,6 +416,16 @@ public class WikiTextExtractor implements Extractor {
 			return sb.toString();
 		} else {
 			return elem.getTarget().getAsString();
+		}
+	}
+
+	private String wtExternalLink(WtExternalLink elem) {
+		if (elem.hasTitle()) {
+			StringBuilder sb = new StringBuilder();
+			sb.append(content(elem.getTitle()));
+			return sb.toString();
+		} else {
+			return new String();
 		}
 	}
 
