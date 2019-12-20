@@ -6,6 +6,7 @@ import org.sweble.wikitext.parser.WikitextParser;
 import org.sweble.wikitext.parser.WikitextPostprocessor;
 import org.sweble.wikitext.parser.nodes.WtBody;
 import org.sweble.wikitext.parser.nodes.WtInternalLink;
+import org.sweble.wikitext.parser.nodes.WtListItem;
 import org.sweble.wikitext.parser.nodes.WtNode;
 import org.sweble.wikitext.parser.nodes.WtTable;
 import org.sweble.wikitext.parser.nodes.WtTableCell;
@@ -13,6 +14,7 @@ import org.sweble.wikitext.parser.nodes.WtTableHeader;
 import org.sweble.wikitext.parser.nodes.WtTableImplicitTableBody;
 import org.sweble.wikitext.parser.nodes.WtTableRow;
 import org.sweble.wikitext.parser.nodes.WtText;
+import org.sweble.wikitext.parser.nodes.WtUnorderedList;
 import org.sweble.wikitext.parser.nodes.WtXmlAttribute;
 import org.sweble.wikitext.parser.nodes.WtXmlAttributes;
 import org.sweble.wikitext.parser.nodes.WtXmlElement;
@@ -233,8 +235,6 @@ public class WikiTextExtractor implements Extractor {
 			case WtNode.NT_XML_ELEMENT:
 				sb.append(content(((WtXmlElement) current).getBody()));
 				break;
-			case WtNode.NT_URL:
-				return new String();
 			case WtNode.NT_INTERNAL_LINK:
 				sb.append(wtInternalLink((WtInternalLink) current));
 				break;
@@ -247,6 +247,13 @@ public class WikiTextExtractor implements Extractor {
 			case WtNode.NT_TEXT:
 				sb.append(wtText((WtText) current));
 				break;
+			case WtNode.NT_UNORDERED_LIST:
+				sb.append(content(current));
+				break;
+			case WtNode.NT_LIST_ITEM:
+				sb.append(content(current));
+				break;
+			case WtNode.NT_URL:
 			default:
 				break;
 			}
