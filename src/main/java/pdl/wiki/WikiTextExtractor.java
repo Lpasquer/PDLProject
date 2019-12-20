@@ -327,6 +327,7 @@ public class WikiTextExtractor implements Extractor {
 	}
 
 	private String processText(String s) {
+		s = s.replace("\n", " ");
 		String[] splitBracket = bracket.split(s);
 		StringBuilder sb;
 
@@ -406,7 +407,7 @@ public class WikiTextExtractor implements Extractor {
 
 		finalValue = sb.toString();
 
-		return finalValue.replace(';', ',').replace("\n", " ");
+		return finalValue.replace(';', ',');
 	}
 
 	private String wtInternalLink(WtInternalLink elem) {
