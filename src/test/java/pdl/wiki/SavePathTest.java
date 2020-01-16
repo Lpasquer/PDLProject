@@ -5,10 +5,10 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
-import org.junit.Test;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 
 
 public class SavePathTest {
@@ -20,7 +20,7 @@ public class SavePathTest {
 	/**
 	 * sauvegarde le chemin dans backupPath
 	 */
-	@Before
+	@BeforeAll
 	public void saveBackupPath() {
 		backupPath = wm.readSaveLocation();
 		
@@ -116,7 +116,7 @@ public class SavePathTest {
 	 * réinitialise le chemin de sauvegarde
 	 * @throws FileNotFoundException
 	 */
-	@After
+	@AfterAll
 	public void resetBackupPath() throws FileNotFoundException {
 		PrintWriter printwriter = new PrintWriter(new FileOutputStream(System.getProperty("user.dir") + "/save_path.txt"));
 		printwriter.println(backupPath);
