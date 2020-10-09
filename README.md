@@ -28,20 +28,15 @@ This project main goal is to improve the work of the previous team that worked o
 * [GitHub](https://github.com/) - For sharing all the modifications to the project.
 
 
-## Contributing
-
-Every members of our crew had the opportunity to contribute as much as they want to there tasks, as long as they are assigned to it in the [Roadmap](https://github.com/Nrkz/PDLProject/projects/1).
 
 
 ## Authors
 
-* **Arnaud--Mozdzer Bastien** - *Team leader - Java/UML developer* - [BastienAM](https://github.com/BastienAM)
-* **Salerno Damien** - *Java/UML developer - Specification writer* - [Nrkz](https://github.com/Nrkz)
-* **Poilane Arthur** - *Java/UML developer - Specification writer* - [ws-palone](https://github.com/ws-palone)
-* **Bruhammer Mélina** - *Java/UML developer - Specification writer* - [MelinaBHMR](https://github.com/MelinaBHMR)
-* **Sarrazin Quentin** - *Java/UML developer - Specification writer* - [QuentinSarra](https://github.com/QuentinSarra)
+* **Léo Pasquereau** - *Team leader - Java/UML developer* - [Lpasquer](https://github.com/Lpasquer)
+* **Flavien Leduc** - *Java/UML developer - Specification writer* - [FlavLdc](https://github.com/FlavLdc)
+* **Thomas Balcou** - *Java/UML developer - Specification writer* - [thomasbalcou](https://github.com/thomasbalcou)
 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/vad101010/PDLProject/blob/master/LICENSE.md) file for details.
+This project is licensed under the MIT License - see the [LICENSE.md](https://github.com/Lpasquer/PDLProject/blob/master/LICENSE.md) file for details.
