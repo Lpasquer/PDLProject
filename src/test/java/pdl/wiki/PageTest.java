@@ -81,7 +81,7 @@ public class PageTest
             Page page_test = new Page(url_array);
             String test = page_test.getTitle();
             assertTrue(test.equals(page_test.getTitle()), "Fonction getUrl() pour l'url contenu à la case [" + i + "] : ");
-            //System.out.println("test ok pour : "+url_array);
+            System.out.println("test ok pour : "+url_array);
         }
     }
 
