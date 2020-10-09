@@ -17,7 +17,7 @@ public abstract class PageChecker
      * La méthode orchestre la vérification en 2 étapes du lien fourni
      *
      * @param pUrl, c'est le lien de l'url qui est vérifiée
-     * @return -1 si le lien fourni n'est pas exploitable ou le nombre de tableaux présents sur la page (0 ou +)
+     * @return null si le lien fourni n'est pas exploitable ou le nombre de tableaux présents sur la page (0 ou +)
      */
     public static List<Element> urlCheck(String pUrl)
     {
