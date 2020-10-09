@@ -7,7 +7,7 @@ A simple command line, java based, Wikipedia table extractor.
 
 Wikipedia Matrix is a software whose goal is to extract existing table from a wikipedia’s page through the HTML or by the Wikitext.
 
-In order to do so, the software needs to verify that the page/URL is from Wikipedia. It also verify if the URL exists.
+In order to do so, the software needs to verify if the URL exists, and after if that the page/URL is from Wikipedia.
 
 If the page contains no table, the software will inform you that the page had no valid table.
 For each existing table in the Wikipedia’s page, there will be two .csv files created : one from the wikitext analysis and one for the HTML one
@@ -15,7 +15,7 @@ For each existing table in the Wikipedia’s page, there will be two .csv files 
 
 ## Context
 
-This project main goal is to improve the work of the previous team that worked on it. A new vision on the subject and the code will generate added value and will improve the software.
+This project is to improve the work of the previous team that worked on it. A new vision on the subject and the code will generate added value and will improve the software.   We will then code a new extractor in python or javascript, which will allow us to prepare ourselves to become real software engineers.
 
 
 ## Softwares
