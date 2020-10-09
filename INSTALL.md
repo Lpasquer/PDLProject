@@ -6,6 +6,30 @@
 - Maven
 - jdk >= 1.8
 
+## Environment variables
+ - If you don't have Java as an environment variable, follow these instructions :
+ 
+ From the Start menu of your computer, right-click on Computer and select Properties.
+
+   In the Control Panel Home window, click Advanced system settings.
+
+   In the System Properties window, click Environment Variables....
+
+   Under System Variables, click New... to create a variable. Name the variable JAVA_HOME, enter the path to your Java JRE 8, and then click OK.
+
+   Example path to the default JRE: C:\Program Files\Java\jre1.8.0_77.
+  
+  - If you don't have Maven as an environment variable, follow these instructions :
+  
+  From the Start menu of your computer, right-click on Computer and select Properties.
+
+   In the Control Panel Home window, click Advanced system settings.
+
+   In the System Properties window, click Environment Variables....
+
+   Under System Variables, click New... to create a variable. Name the variable MAVEN_HOME, enter the path to your Maven File, and then click OK.
+
+   Example path :  C:\Man\apache-maven-3.3.9-bin\apache-maven-3.3.9\bin
 
 ## Generic installation
 Clone the project with Git using the following command.
