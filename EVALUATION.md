@@ -10,3 +10,7 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -getTitleWithoutSpace() isn't representative, it test just one precise case. By the way, it don't work if there is an accent in the title.  
 
 * SavePathTest : **Take a look at the issues associate**
+
+# Manual tests
+
+We also did manual testing on links from wikipedia pages and other sites not listed in the table. For each wikipedia link, the software finds the correct number of tables in the page and for the other links, it detects that it is not a wikipedia page
